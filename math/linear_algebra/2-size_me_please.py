@@ -3,6 +3,7 @@
 
 def matrix_transpose(matrix):
 """calculate the shape of a matrix"""
+
     shape []
     while isinstance(matrix, list):
         shape.append(len(matrix))
