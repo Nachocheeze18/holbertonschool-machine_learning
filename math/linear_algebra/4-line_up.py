@@ -12,4 +12,3 @@ def add_arrays(arr1, arr2):
         return arr3
     else:
         return None
-        
