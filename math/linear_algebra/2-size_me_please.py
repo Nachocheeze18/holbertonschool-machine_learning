@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""code to calculate shapes"""
 
 
 def matrix_transpose(matrix):
