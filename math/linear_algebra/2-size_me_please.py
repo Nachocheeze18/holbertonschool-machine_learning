@@ -2,7 +2,7 @@
 """code to calculate shapes"""
 
 
-def matrix_transpose(matrix):
+def matrix_shape(matrix):
     """calculate the shape of a matrix"""
     shape = []
     while isinstance(matrix, list):
