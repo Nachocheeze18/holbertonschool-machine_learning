@@ -4,7 +4,7 @@
 
 def matrix_transpose(matrix):
     """calculate the shape of a matrix"""
-    shape []
+    shape = []
     while isinstance(matrix, list):
         shape.append(len(matrix))
         matrix = matrix[0]
