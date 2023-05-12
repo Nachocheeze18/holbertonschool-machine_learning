@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""function to add 2 arrays"""
+"""adding arrays"""
 
 
-def add_arrays(arr1, arr2):\
-    """adding arrays"""
-if len(arr1) != len(arr2):
-    return None
-result = []
-for i in range(len(arr1)):
-    result.append(arr1[i] + arr2[i])
-    return result
+def add_arrays(arr1, arr2):
+    """Add An Array Function"""
+    arr3 = []
+
+    if len(arr1) == len(arr2):
+        for i in range(len(arr1)):
+            arr3.append(arr1[i] + arr2[i])
+        return arr3
+    else:
+        return None
