@@ -5,15 +5,6 @@
 def summation_i_squared(n):
     """Addition With Sigma"""
     if n >= 1:
-        return recursive_summation(n, 1, 0)
+        return int((n * (n + 1) * (2 * n + 1)) / 6)
     else:
         return None
-
-
-def recursive_summation(n, x, i):
-    """recursive summation function"""
-    if x <= n:
-        i = i + x ** 2
-        return recursive_summation(n, x + 1, i)
-    else:
-        return i
