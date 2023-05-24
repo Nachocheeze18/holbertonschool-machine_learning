@@ -5,6 +5,7 @@
 e = 2.7182818285
 pi = 3.1415926536
 
+
 class Poisson:
     """Poisson Class"""
     def __init__(self, data=None, lambtha=1.):
@@ -24,8 +25,7 @@ class Poisson:
     def pmf(self, k):
         """pmf function"""
 
-
-        k = int(k)        
+        k = int(k)
         def factorial(n):
             result = 1
             for i in range(1, n + 1):
