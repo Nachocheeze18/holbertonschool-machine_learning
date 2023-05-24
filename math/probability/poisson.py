@@ -26,12 +26,13 @@ class Poisson:
         """pmf function"""
 
         k = int(k)
+
         def factorial(n):
             """factorial function"""
 
             result = 1
             for i in range(1, n + 1):
-            result *= i
+                result *= i
             return result
 
         top = e**(-self.lambtha) * self.lambtha**(self.k)
