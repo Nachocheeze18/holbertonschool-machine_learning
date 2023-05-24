@@ -22,7 +22,9 @@ class Poisson:
             self.lambtha = sum(data) / len(data)
 
     def pmf(self, k):
-"""pmf function"""
+        """pmf function"""
+
+
         k = int(k)        
         def factorial(n):
             result = 1
@@ -30,7 +32,6 @@ class Poisson:
             result *= i
             return result
 
-        top = e**(-self.lambtha) * self.lambtha**(k)
+        top = e**(-self.lambtha) * self.lambtha**(self.k)
         bot = factorial(self.k)
         sum = top / bot
-    
