@@ -25,15 +25,6 @@ class Poisson:
     def pmf(self, k):
         """pmf function"""
 
-        k = int(k)
-        if k < 0 or k >= len(self.data):
-            return 0
-        
-         total_count = sum(self.data)
-        pmf_value = self.data[k] / total_count
-
-        return pmf_value
-        
         def factorial(n):
             """factorial function"""
 
@@ -41,7 +32,11 @@ class Poisson:
             for i in range(1, n + 1):
                 result *= i
             return result
-
+        if type(k) != int:
+            self.k = (k)
+            if k < 0:
+            return 0
+            
         top = e**(-self.lambtha) * self.lambtha**(self.k)
         bot = factorial(self.k)
         sum = top / bot
