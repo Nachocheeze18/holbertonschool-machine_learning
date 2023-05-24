@@ -36,6 +36,6 @@ class Poisson:
         if k < 0:
             return 0
 
-        top = e ** (-self.lambtha) * self.lambtha ** (self.k)
-        bot = factorial(self.k)
+        top = e ** (-self.lambtha) * self.lambtha ** (k)
+        bot = factorial(k)
         sum = top / bot
