@@ -42,16 +42,16 @@ class Poisson:
         sum = top / bot
         return sum
 
-        def cdf(self, k):
-            """cdf function"""
+    def cdf(self, k):
+        """cdf function"""
 
-            if k < 0:
-                return 0
+        if k < 0:
+            return 0
 
-            i = int(k)
-            prob = 0
+        i = int(k)
+        prob = 0
 
-            for x in range(i + 1):
-                prob += self.pmf(x)
+        for x in range(i + 1):
+            prob += self.pmf(x)
 
-            return (prob)
+        return prob
