@@ -32,10 +32,9 @@ class Poisson:
             for i in range(1, n + 1):
                 result *= i
             return result
-        if type(k) != int:
-            self.k = (k)
-            if k < 0:
-                return 0
+        k = int(k)
+        if k < 0:
+            return 0
 
         top = e ** (-self.lambtha) * self.lambtha ** (self.k)
         bot = factorial(self.k)
