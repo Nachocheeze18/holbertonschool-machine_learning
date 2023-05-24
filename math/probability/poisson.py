@@ -41,3 +41,15 @@ class Poisson:
         bot = factorial(k)
         sum = top / bot
         return sum
+
+    def cdf(self, k):
+         """cdf function"""
+        k = int(k)
+        if k < 0:
+            return 0
+
+        cdf_sum = 0
+        for i in range(k + 1):
+            cdf_sum += self.pmf(i)
+
+        return cdf_sum
