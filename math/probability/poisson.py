@@ -44,12 +44,13 @@ class Poisson:
 
         def cdf(self, k):
              """cdf function"""
-            k = int(k)
+ 
             if k < 0:
                 return 0
+            i = int(k)
+            prob = 0
 
-            cdf_sum = 0
-            for i in range(k + 1):
-                cdf_sum += self.pmf(i)
+            for x in range(i + 1):
+                cdf_sum += self.pmf(x)
 
-            return cdf_sum
+            return (prob)
