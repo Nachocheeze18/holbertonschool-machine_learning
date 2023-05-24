@@ -29,6 +29,11 @@ class Poisson:
         if k < 0 or k >= len(self.data):
             return 0
         
+         total_count = sum(self.data)
+        pmf_value = self.data[k] / total_count
+
+        return pmf_value
+        
         def factorial(n):
             """factorial function"""
 
