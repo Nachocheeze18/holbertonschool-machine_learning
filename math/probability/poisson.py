@@ -32,6 +32,7 @@ class Poisson:
             for i in range(1, n + 1):
                 result *= i
             return result
+
         k = int(k)
         if k < 0:
             return 0
@@ -39,3 +40,4 @@ class Poisson:
         top = e ** (-self.lambtha) * self.lambtha ** (k)
         bot = factorial(k)
         sum = top / bot
+        return sum
