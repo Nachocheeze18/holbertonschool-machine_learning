@@ -17,8 +17,9 @@ class Poisson:
             if len(data) < 2:
                 raise ValueError('data must contain multiple values')
             self.lambtha = sum(data) / len(data)
+
     def pmf(self, k):
-        
+
         """convert k to an interger if not already"""
         k = int(k)
 
