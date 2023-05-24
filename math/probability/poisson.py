@@ -26,7 +26,9 @@ class Poisson:
         """pmf function"""
 
         k = int(k)
-
+        if k < 0 or k >= len(self.data):
+            return 0
+        
         def factorial(n):
             """factorial function"""
 
