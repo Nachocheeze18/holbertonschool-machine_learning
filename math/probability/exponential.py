@@ -6,7 +6,7 @@ pi = 3.1415946536
 
 
 class Exponential:
-        """Eponential Class"""      
+    """Eponential Class"""
     def __init__(self, data=None, lambtha=1.):
         """constructor"""
         if data is None:
