@@ -20,3 +20,48 @@ class Binomial:
             self.n = len(data)
             successes = sum(data)
             self.p = float(successes) / self.n
+
+mean = sum(data) / len(data)
+            v = 0
+            for number in data:
+                v = v + (number - mean) ** 2
+            v = v / len(data)
+            q = v / mean
+            p1 = 1 - q
+            n1 = (sum(data) / p1) / len(data)
+            self.n = int(round(n1))
+            self.p = float(mean/self.n)
+
+    def pmf(self, k):
+        """pmf calculations"""
+
+        k = int(k)
+
+        if k < 0:
+            return 0
+
+        c = (self.factorial(k) * self.factorial(self.n - k))
+        a = (self.factorial(self.n) / c)
+
+        return (a * (self.p ** k) * ((1 - self.p) ** (self.n - k)))
+
+    def factorial(self, k):
+        """factorial helper function"""
+        result = 1
+        for i in range(1, k+1):
+            result *= i
+        return result
+
+    def cdf(self, k):
+        """cdf calculations"""
+        if k < 0:
+            return 0
+
+        i = int(k)
+        prob = 0
+
+        for x in range(i + 1):
+            prob += self.pmf(x)
+
+        return (prob)
+    
