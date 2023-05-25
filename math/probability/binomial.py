@@ -21,7 +21,7 @@ class Binomial:
             successes = sum(data)
             self.p = float(successes) / self.n
 
-mean = sum(data) / len(data)
+            mean = sum(data) / len(data)
             v = 0
             for number in data:
                 v = v + (number - mean) ** 2
