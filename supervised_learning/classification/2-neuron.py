@@ -3,8 +3,8 @@
 import numpy as np
 
 
-class Nueron:
-    """Nueron Class"""
+class Neuron:
+    """Neuron Class"""
     def __init__(self, nx):
         """Cunstructor"""
         if not isinstance(nx, int):
