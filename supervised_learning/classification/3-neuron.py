@@ -28,8 +28,9 @@ class Neuron:
     def cost(self, Y, A):
         """model cost"""
         m = Y.shape[1]
-        cost = (-1 / m) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
-        return cost
+        cs = (-1 / m) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
+        """cs = cost"""
+        return cs
 
     @property
     def W(self):
