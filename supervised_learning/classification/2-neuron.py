@@ -4,6 +4,7 @@
 
 import numpy as np
 
+
 class Nueron:
     """Nueron Class"""
     def __init__(self, nx):
