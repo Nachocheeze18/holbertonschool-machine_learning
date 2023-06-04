@@ -50,6 +50,7 @@ class Neuron:
         self.__b -= alpha * db
 
     def train(self, X, Y, iterations=5000, alpha=0.05):
+        """train func"""
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
         if iterations <= 0:
