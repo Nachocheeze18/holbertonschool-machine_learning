@@ -34,13 +34,11 @@ class Neuron:
 
     def evaluate(self, X, Y):
         """Evaluate func"""
-        m = Y.shape[1]
-        prediction = np.zeros((1, m))
-
         A = self.forward_prop(X)
-        prediction[A >= 0.5] = 1
+        prediction = np.where(A >= 0.5, 1)
 
         return prediction, self.cost(Y, A)
+
     @property
     def W(self):
         return self.__W
