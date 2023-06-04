@@ -39,7 +39,7 @@ class Neuron:
         A = self.forward_prop(X)
         prediction[A >= 0.5] = 1
 
-        cs = -np.mean(Y * np.log(A) + (1 - Y) * np.log(1 - A))
+        cs = -np.mean(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
         return prediction, cs
     @property
     def W(self):
