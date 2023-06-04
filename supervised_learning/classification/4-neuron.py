@@ -33,14 +33,14 @@ class Neuron:
         return cs
 
     def evaluate(self, X, Y):
-        m = X.shape[1]
+        """Evaluate func"""
+        m = Y.shape[1]
         prediction = np.zeros((1, m))
 
         A = self.forward_prop(X)
         prediction[A >= 0.5] = 1
 
-        cs = -np.mean(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
-        return prediction, cs
+        return prediction, self.cost(Y, A)
     @property
     def W(self):
         return self.__W
