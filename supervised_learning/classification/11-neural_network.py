@@ -35,10 +35,11 @@ class NeuralNetwork:
         return 1 / (1 + np.exp(-Z))
 
     def cost(self, Y, A):
+        """cost func"""
         cs = -np.mean(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
         """cs = cost"""
         return cs
-    
+
     @property
     def W1(self):
         return self.__W1
