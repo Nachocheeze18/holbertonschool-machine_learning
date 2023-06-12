@@ -6,7 +6,6 @@ import tensorflow as tf
 def create_layer(prev, n, activation):
     """layer func"""
 
-
     initial = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
     input_shape = prev.get_shape().as_list()[1:]
     weih = tf.Variable(initializer([input_shape[-1], n]), name='layer_weights')
