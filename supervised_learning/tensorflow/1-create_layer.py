@@ -5,11 +5,14 @@ import tensorflow as tf
 
 def create_layer(prev, n, activation):
     """layer func"""
+    with tf.variable_scope("layer"):
+        initializer = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+        weih = tf.get_variable("weights", shape=[prev.get_shape()[1], n], initializer=initializer)
+        biases = tf.get_variable("biases", shape=[n], initializer=tf.zeros_initializer())
 
-    initial = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
-    input_shape = prev.get_shape().as_list()[1:]
-    weih = tf.Variable(initializer([input_shape[-1], n]), name='layer_weights')
-    biases = tf.Variable(tf.zeros([n]), name='layer_biases')
-    layer_output = tf.matmul(prev, weights) + biases
-    output = activation(layer_output)
-    return output
+        layer = tf.matmul(prev, weights) + biases
+
+        if activation is not None:
+            layer = activation(layer)
+
+    return layer
