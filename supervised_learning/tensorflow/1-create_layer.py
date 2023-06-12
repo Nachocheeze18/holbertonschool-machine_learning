@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-"""Creating Forward Prop"""
+"""Creating First Tensor Layer"""
 import tensorflow as tf
-create_layer = __import__('1-create_layer').create_layer
 
 
-def forward_prop(x, layer_sizes=[], activations=[]):
-    """Forward Prop"""
-    for n in range(len(layer_sizes)):
-        x = create_layer(x, layer_sizes[n], activations[n])
-
-    return x
+def create_layer(prev, n, activation):
+    """Create Layer"""
+    init = tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+    layer = tf.layers.dense(prev, n, activation=activation,
+                            kernel_initializer=init)
+    return layer
