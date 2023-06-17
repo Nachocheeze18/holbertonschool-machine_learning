@@ -26,6 +26,8 @@ class DeepNeuralNetwork:
             else:
                 input_size = layers[i-1]
 
-            self.weights['W' + str(i+1)] = np.random.randn
-            (layer_size, input_size)* np.sqrt(2 / input_size)
+            self.weights['W' + str(i+1)] = (
+                np.random.randn(layer_size, input_size) *
+                np.sqrt(2 / input_size)
+            )
             self.weights['b' + str(i+1)] = np.zeros((layer_size, 1))
