@@ -2,7 +2,6 @@
 """Neural Network"""
 import numpy as np
 
-
 class DeepNeuralNetwork:
     """deep neural network"""
     def __init__(self, nx, layers):
@@ -20,9 +19,22 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for l in range(self.__L):
-            if l == 0:
-                self.__weights['W' + str(l+1)] = np.random.randn(layers[l], nx) * np.sqrt(2/nx)
+        for l, layer_size in enumerate(layers, start=1):
+            if l == 1:
+                input_size = nx
             else:
-                self.__weights['W' + str(l+1)] = np.random.randn(layers[l], layers[l-1]) * np.sqrt(2/layers[l-1])
-            self.__weights['b' + str(l+1)] = np.zeros((layers[l], 1))
+                input_size = layers[l-2]
+            self.__weights['W' + str(l)] = np.random.randn(layer_size, input_size) * np.sqrt(2 / input_size)
+            self.__weights['b' + str(l)] = np.zeros((layer_size, 1))
+
+    @property
+    def L(self):
+        return self.__L
+
+    @property
+    def cache(self):
+        return self.__cache
+
+    @property
+    def weights(self):
+        return self.__weights
