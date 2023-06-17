@@ -4,9 +4,9 @@ import numpy as np
 
 
 class DeepNeuralNetwork:
-    """Neural Network Class"""
+    """deep neural network"""
     def __init__(self, nx, layers):
-        """Constructor"""
+        """constructor"""
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         if nx < 1:
@@ -20,45 +20,45 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for i in range(self.__L):
+        for i, layer_size in enumerate(layers):
             if i == 0:
-                j = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
-                self.__weights['W' + str(i + 1)] = j
+                input_size = nx
             else:
-                jjj = np.sqrt(2 / layers[i-1])
-                jj = np.random.randn(layers[i], layers[i-1]) * jjj
-                self.__weights['W' + str(i + 1)] = jj
-            self.__weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
+                input_size = layers[i-1]
+
+            self.__weights['W' + str(i+1)] = (
+                np.random.randn(layer_size, input_size) *
+                np.sqrt(2 / input_size)
+            )
+            self.__weights['b' + str(i+1)] = np.zeros((layer_size, 1))
 
     def forward_prop(self, X):
-        """Forward Propogation"""
-        A = X
+        """Performs forward propagation"""
         self.__cache['A0'] = X
 
-        for i in range(1, self.__L + 1):
-            W = self.__weights['W' + str(i)]
-            b = self.__weights['b' + str(i)]
-            Z = np.matmul(W, A) + b
-            A = self.sigmoid(Z)
-            self.__cache['A' + str(i)] = A
+        for l in range(1, self.__L + 1):
+            A_prev = self.__cache['A' + str(l-1)]
+            W = self.__weights['W' + str(l)]
+            b = self.__weights['b' + str(l)]
 
-        return A, self.__cache
+            Z = np.matmul(W, A_prev) + b
+            A = 1 / (1 + np.exp(-Z))
 
-    def sigmoid(self, X):
-        """Sigmoid Helper"""
-        return 1 / (1 + np.exp(-X))
+            self.__cache['A' + str(l)] = A
+
+        return self.__cache['A' + str(self.__L)], self.__cache
 
     @property
     def L(self):
-        """layer getter"""
+        """Getter for L (number of layers)"""
         return self.__L
 
     @property
     def cache(self):
-        '''itermed val getter'''
+        """Getter for cache"""
         return self.__cache
 
     @property
     def weights(self):
-        '''weight getter'''
+        """Getter for weights"""
         return self.__weights
