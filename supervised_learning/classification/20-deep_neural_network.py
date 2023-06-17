@@ -59,8 +59,8 @@ class DeepNeuralNetwork:
         """Evaluates the network's predictions"""
         output = self.forward_prop(X)
         predictions = np.where(output >= 0.5, 1, 0)
-        cost = self.cost(Y, output)
-        return predictions, cost
+        cs = self.cost(Y, output)
+        return predictions, cs
 
     @property
     def L(self):
