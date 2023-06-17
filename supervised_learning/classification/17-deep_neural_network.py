@@ -16,9 +16,9 @@ class DeepNeuralNetwork:
         if len(layers) < 1 or False in (np.array(layers) > 0):
             raise TypeError("layers must be a list of positive integers")
 
-        self.L = len(layers)
-        self.cache = {}
-        self.weights = {}
+        self.__L = len(layers)
+        self.__cache = {}
+        self.__weights = {}
 
         for i, layer_size in enumerate(layers):
             if i == 0:
@@ -26,23 +26,23 @@ class DeepNeuralNetwork:
             else:
                 input_size = layers[i-1]
 
-            self.weights['W' + str(i+1)] = (
+            self.__weights['W' + str(i+1)] = (
                 np.random.randn(layer_size, input_size) *
                 np.sqrt(2 / input_size)
             )
-            self.weights['b' + str(i+1)] = np.zeros((layer_size, 1))
+            self.__weights['b' + str(i+1)] = np.zeros((layer_size, 1))
 
     @property
     def L(self):
-        """layer"""
+        """Getter for L (number of layers)"""
         return self.__L
 
     @property
     def cache(self):
-        """itermed val"""
+        """Getter for cache"""
         return self.__cache
 
     @property
     def weights(self):
-        """weight"""
+        """Getter for weights"""
         return self.__weights
