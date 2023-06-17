@@ -69,4 +69,3 @@ class DeepNeuralNetwork:
     def weights(self):
         """Getter for weights"""
         return self.__weights
-
