@@ -63,23 +63,28 @@ class DeepNeuralNetwork:
 
         return predictions, cost
 
-def gradient_descent(self, Y, cache, alpha=0.05):
-    """Calculates one pass of gradient descent on the neural network"""
-    m = Y.shape[1]
-    dZ = cache['A' + str(self.__L)] - Y
+    def gradient_descent(self, Y, cache, alpha=0.05):
+        """Gradient Descent"""
+        m = Y.shape[1]
+        L = self.__L
 
-    for l in range(self.__L, 0, -1):
-        A_prev = cache['A' + str(l-1)]
-        W = self.__weights['W' + str(l)]
+        A = cache["A" + str(L)]
+        dZ = A - Y
 
-        dW = (1 / m) * np.matmul(dZ, A_prev.T)
-        db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
-        dA = np.matmul(W.T, dZ)
+        for l in reversed(range(1, L+1)):
+            A_prev = cache["A" + str(l - 1)]
+            W = self.__weights["W" + str(l)]
+            b = self.__weights["b" + str(l)]
 
-        self.__weights['W' + str(l)] -= alpha * dW
-        self.__weights['b' + str(l)] -= alpha * db
+            dW = (1 / m) * np.matmul(dZ, A_prev.T)
+            db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
+            dA = np.matmul(W.T, dZ)
 
-        dZ = dA * (A_prev * (1 - A_prev))
+            self.__weights["W" + str(l)] -= alpha * dW
+            self.__weights["b" + str(l)] -= alpha * db
+
+            if l > 1:
+                dZ = dA * (A_prev * (1 - A_prev))
 
     @property
     def L(self):
