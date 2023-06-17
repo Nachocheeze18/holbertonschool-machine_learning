@@ -31,3 +31,4 @@ class DeepNeuralNetwork:
                 np.sqrt(2 / input_size)
             )
             self.weights['b' + str(i+1)] = np.zeros((layer_size, 1))
+

@@ -4,9 +4,9 @@ import numpy as np
 
 
 class DeepNeuralNetwork:
-    """Neural Network Class"""
+    """deep neural network"""
     def __init__(self, nx, layers):
-        """Constructor"""
+        """constructor"""
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         if nx < 1:
@@ -16,31 +16,33 @@ class DeepNeuralNetwork:
         if len(layers) < 1 or False in (np.array(layers) > 0):
             raise TypeError("layers must be a list of positive integers")
 
-        self.__L = len(layers)
-        self.__cache = {}
-        self.__weights = {}
+        self.L = len(layers)
+        self.cache = {}
+        self.weights = {}
 
-        for i in range(self.__L):
+        for i, layer_size in enumerate(layers):
             if i == 0:
-                j = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
-                self.__weights['W' + str(i + 1)] = j
+                input_size = nx
             else:
-                jjj = np.sqrt(2 / layers[i-1])
-                jj = np.random.randn(layers[i], layers[i-1]) * jjj
-                self.__weights['W' + str(i + 1)] = jj
-            self.__weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
+                input_size = layers[i-1]
+
+            self.weights['W' + str(i+1)] = (
+                np.random.randn(layer_size, input_size) *
+                np.sqrt(2 / input_size)
+            )
+            self.weights['b' + str(i+1)] = np.zeros((layer_size, 1))
 
     @property
     def L(self):
-        """layer getter"""
+        """layer"""
         return self.__L
 
     @property
     def cache(self):
-        '''itermed val getter'''
+        """itermed val"""
         return self.__cache
 
     @property
     def weights(self):
-        '''weight getter'''
+        """weight"""
         return self.__weights
