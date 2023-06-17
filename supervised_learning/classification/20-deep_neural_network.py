@@ -56,11 +56,11 @@ class DeepNeuralNetwork:
         return cs
 
     def evaluate(self, X, Y):
-        """Evaluate func"""
-        A = self.forward_prop(X)
-        prediction = np.where(A >= 0.5, 1, 0)
-
-        return prediction, self.cost(Y, A)
+        """Evaluates the network's predictions"""
+        output = self.forward_prop(X)
+        predictions = np.where(output >= 0.5, 1, 0)
+        cost = self.cost(Y, output)
+        return predictions, cost
 
     @property
     def L(self):
