@@ -19,11 +19,13 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for l, layer_size in enumerate(layers, start=1):
+        for l in range(1, self.__L + 1):
             if l == 1:
                 input_size = nx
             else:
                 input_size = layers[l-2]
+                
+            layer_size = layers[l-1]
             self.__weights['W' + str(l)] = np.random.randn(layer_size, input_size) * np.sqrt(2 / input_size)
             self.__weights['b' + str(l)] = np.zeros((layer_size, 1))
 
