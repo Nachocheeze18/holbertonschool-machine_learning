@@ -1,23 +1,14 @@
 #!/usr/bin/env python3
-"""One Hot Encode?"""
+"""one hot encode"""
 import numpy as np
 
 
 def one_hot_encode(Y, classes):
-    """Encode Fun"""
-
-    if type(Y) is not np.ndarray:
+    """numeric label to matrix"""
+    if not isinstance(Y, np.ndarray) or len(Y.shape) != 1:
         return None
-
-    try:
-        m = Y.shape[0]
-        one_hot_matrix = np.zeros((classes, m))
-
-        for i in range(m):
-            if Y[i] >= 0:
-                one_hot_matrix[Y[i], i] = 1
-
-        return one_hot_matrix
-
-    except Exception:
+    if not isinstance(classes, int) or classes < np.max(Y) + 1:
         return None
+    one_hot = np.zeros((Y.shape[0], classes))
+    one_hot[np.arange(Y.shape[0]), Y] = 1
+    return one_hot
