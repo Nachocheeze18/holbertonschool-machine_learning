@@ -141,11 +141,15 @@ class DeepNeuralNetwork:
     
     @staticmethod
     def load(filename):
-        """Loads a object"""
+        '''loads'''
         try:
             with open(filename, "rb") as file:
-                return pickle.load(file)
-        except Exception:
+                obj = pickle.load(file)
+                if isinstance(obj, DeepNeuralNetwork):
+                    return obj
+                else:
+                    return None
+        except FileNotFoundError:
             return None
 
     @property
