@@ -10,7 +10,7 @@ def one_hot_encode(Y, classes):
 
     try:
         m = Y.shape[0]
-        one_hot_matrix = np.zeros((classes, m), dtype=int)
+        one_hot_matrix = np.zeros((classes, m))
 
         for i in range(m):
             if Y[i] >= 0:
