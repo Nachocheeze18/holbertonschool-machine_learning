@@ -4,11 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
-
 class DeepNeuralNetwork:
-    """Neural Network Class"""
+    """deep neural network"""
     def __init__(self, nx, layers):
-        """Constructor"""
+        """constructor"""
         if not isinstance(nx, int):
             raise TypeError("nx must be an integer")
         if nx < 1:
@@ -22,46 +21,48 @@ class DeepNeuralNetwork:
         self.__cache = {}
         self.__weights = {}
 
-        for i in range(self.__L):
+        for i, layer_size in enumerate(layers):
             if i == 0:
-                j = np.random.randn(layers[i], nx) * np.sqrt(2 / nx)
-                self.__weights['W' + str(i + 1)] = j
+                input_size = nx
             else:
-                jjj = np.sqrt(2 / layers[i-1])
-                jj = np.random.randn(layers[i], layers[i-1]) * jjj
-                self.__weights['W' + str(i + 1)] = jj
-            self.__weights['b' + str(i + 1)] = np.zeros((layers[i], 1))
+                input_size = layers[i-1]
+
+            self.__weights['W' + str(i+1)] = (
+                np.random.randn(layer_size, input_size) *
+                np.sqrt(2 / input_size)
+            )
+            self.__weights['b' + str(i+1)] = np.zeros((layer_size, 1))
 
     def forward_prop(self, X):
-        """Forward Propogation"""
-        A = X
+        """Performs forward propagation"""
         self.__cache['A0'] = X
 
-        for i in range(1, self.__L + 1):
-            W = self.__weights['W' + str(i)]
-            b = self.__weights['b' + str(i)]
-            Z = np.matmul(W, A) + b
-            A = self.sigmoid(Z)
-            self.__cache['A' + str(i)] = A
+        for l in range(1, self.__L + 1):
+            A_prev = self.__cache['A' + str(l-1)]
+            W = self.__weights['W' + str(l)]
+            b = self.__weights['b' + str(l)]
 
-        return A, self.__cache
+            Z = np.matmul(W, A_prev) + b
+            A = 1 / (1 + np.exp(-Z))
 
-    def sigmoid(self, X):
-        """Sigmoid Helper"""
-        return 1 / (1 + np.exp(-X))
+            self.__cache['A' + str(l)] = A
+
+        return self.__cache['A' + str(self.__L)], self.__cache
 
     def cost(self, Y, A):
-        """Cost Func"""
+        """model cost"""
         m = Y.shape[1]
-        j = np.log(1.0000001 - A)
-        return ((-1/m) * np.sum(Y * np.log(A) + (1 - Y) * j))
+        cs = (-1 / m) * np.sum(Y * np.log(A) + (1 - Y) * np.log(1.0000001 - A))
+        """cs = cost"""
+        return cs
 
     def evaluate(self, X, Y):
-        """Evaluate Func"""
+        """Evaluates the network's predictions"""
         A, _ = self.forward_prop(X)
         predictions = np.where(A >= 0.5, 1, 0)
+        cost = self.cost(Y, A)
 
-        return predictions, self.cost(Y, A)
+        return predictions, cost
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """Gradient Descent"""
@@ -71,7 +72,7 @@ class DeepNeuralNetwork:
         A = cache["A" + str(L)]
         dZ = A - Y
 
-        for l in range(L, 0, -1):
+        for l in reversed(range(1, L+1)):
             A_prev = cache["A" + str(l - 1)]
             W = self.__weights["W" + str(l)]
             b = self.__weights["b" + str(l)]
@@ -86,80 +87,78 @@ class DeepNeuralNetwork:
             if l > 1:
                 dZ = dA * (A_prev * (1 - A_prev))
 
-    def train(self, X, Y, iterations=5000, alpha=0.05,
-              verbose=True, graph=True, step=100):
-        """trains the neuron"""
-        if type(iterations) is not int:
+    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+        """Trains the deep neural network"""
+        if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
-        if iterations <= 0:
+        if iterations < 1:
             raise ValueError("iterations must be a positive integer")
-        if type(alpha) is not float:
+        if not isinstance(alpha, float):
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
+        if not isinstance(step, int):
+            raise TypeError("step must be an integer")
+        if step <= 0 or step > iterations:
+            raise ValueError("step must be positive and <= iterations")
 
-        Xgrp = []
-        Ygrp = []
-
-        for i in range(iterations):
-            A, cache = self.forward_prop(X)
-            self.gradient_descent(Y, self.__cache, alpha)
-
+        costs = []
+        iterations_list = []
+        if verbose or graph:
+            A, _ = self.forward_prop(X)
+            cost = self.cost(Y, A)
+            costs.append(cost)
+            iterations_list.append(0)
             if verbose:
-                if i == 0 or i % step == 0:
-                    print("Cost after {} iterations: {}"
-                          .format(i, self.cost(Y, A)))
+                print(f"Cost after 0 iterations: {cost}")
 
-            if graph:
-                if i == 0 or i % step == 0:
-                    current_cost = self.cost(Y, A)
-                    Ygrp.append(current_cost)
-                    Xgrp.append(i)
-                plt.plot(Xgrp, Ygrp)
-                plt.xlabel('Iteration')
-                plt.ylabel('Cost')
-                plt.title('Training Cost')
+        for i in range(1, iterations + 1):
+            A, cache = self.forward_prop(X)
+            self.gradient_descent(Y, cache, alpha)
 
-            if verbose or graph:
-                if type(step) is not int:
-                    raise TypeError("step must be in integer")
-                if step <= 0 or step > iterations:
-                    raise ValueError("step must be positive and <= iterations")
-        if graph:
+            if i % step == 0 or i == iterations:
+                cost = self.cost(Y, A)
+                costs.append(cost)
+                iterations_list.append(i)
+                if verbose:
+                    print(f"Cost after {i} iterations: {cost}")
+
+        if graph: 
+            plt.plot(iterations_list, costs, 'b-')
+            plt.xlabel('Iteration')
+            plt.ylabel('Cost')
+            plt.title('Training Cost')
             plt.show()
-        return (self.evaluate(X, Y))
+
+        return self.evaluate(X, Y)
 
     def save(self, filename):
-        """save a file"""
-        if not filename.endswith('.pkl'):
-            filename += '.pkl'
-
-        with open(filename, 'wb') as file:
+        """Saves the instance object"""
+        if not filename.endswith(".pkl"):
+            filename += ".pkl"
+        with open(filename, "wb") as file:
             pickle.dump(self, file)
-
+    
     @staticmethod
     def load(filename):
-        "load a file"
+        """Loads a object"""
         try:
-            if not filename.endswith('.pkl'):
-                filename += '.pkl'
-
-            with open(filename, 'rb') as file:
+            with open(filename, "rb") as file:
                 return pickle.load(file)
-        except Exception:
+        except FileNotFoundError:
             return None
 
     @property
     def L(self):
-        """layer getter"""
+        """Getter for L (number of layers)"""
         return self.__L
 
     @property
     def cache(self):
-        '''itermed val getter'''
+        """Getter for cache"""
         return self.__cache
 
     @property
     def weights(self):
-        '''weight getter'''
+        """Getter for weights"""
         return self.__weights
