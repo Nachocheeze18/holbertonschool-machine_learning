@@ -12,4 +12,3 @@ def one_hot_decode(one_hot):
         return None
 
     return np.argmax(one_hot, axis=0)
-
