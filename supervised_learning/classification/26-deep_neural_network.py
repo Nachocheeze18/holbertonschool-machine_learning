@@ -145,7 +145,7 @@ class DeepNeuralNetwork:
         try:
             with open(filename, "rb") as file:
                 return pickle.load(file)
-        except FileNotFoundError:
+        except Exception:
             return None
 
     @property
