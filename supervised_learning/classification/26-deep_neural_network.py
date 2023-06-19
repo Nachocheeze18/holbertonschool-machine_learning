@@ -143,12 +143,12 @@ class DeepNeuralNetwork:
     def load(filename):
         """loads object"""
         try:
-            if not filename.endswith('.pkl'):
-                filename += '.pkl'
-
             with open(filename, "rb") as file:
                 obj = pickle.load(file)
-                return obj
+                if isinstance(obj, DeepNeuralNetwork):
+                    return obj
+                else:
+                    return None
         except Exception:
             return None
 
