@@ -88,7 +88,7 @@ class DeepNeuralNetwork:
             if l > 1:
                 dZ = dA * (A_prev * (1 - A_prev))
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, 
+    def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
         """Trains the deep neural network"""
         if not isinstance(iterations, int):
@@ -145,15 +145,13 @@ class DeepNeuralNetwork:
     def load(filename):
         """loads object"""
         try:
-            with open(filename, "rb") as file:
-                obj = pickle.load(file)
-                if isinstance(obj, DeepNeuralNetwork):
-                    return obj
-                else:
-                    return None
+            if not filename.endswith('.pkl'):
+                filename += '.pkl'
+
+            with open(filename, 'rb') as file:
+                return pickle.load(file)
         except Exception:
             return None
-
     @property
     def L(self):
         """Getter for L (number of layers)"""
