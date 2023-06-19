@@ -138,6 +138,7 @@ class DeepNeuralNetwork:
         """saves object"""
         if not filename.endswith(".pkl"):
             filename += ".pkl"
+    
             with open(filename, "wb") as file:
                 pickle.dump(self, file)
 
@@ -152,6 +153,7 @@ class DeepNeuralNetwork:
                 return pickle.load(file)
         except Exception:
             return None
+
     @property
     def L(self):
         """Getter for L (number of layers)"""
