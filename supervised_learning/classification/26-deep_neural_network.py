@@ -133,19 +133,15 @@ class DeepNeuralNetwork:
         return self.evaluate(X, Y)
 
     def save(self, filename):
-        '''saves object to file'''
+        """saves object"""
         if not filename.endswith(".pkl"):
             filename += ".pkl"
-
-        try:
             with open(filename, "wb") as file:
                 pickle.dump(self, file)
-        except Exception:
-            return None
 
     @staticmethod
     def load(filename):
-        '''loads'''
+        """loads object"""
         try:
             if not filename.endswith('.pkl'):
                 filename += '.pkl'
