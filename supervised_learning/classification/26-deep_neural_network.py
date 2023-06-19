@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pickle
 
+
 class DeepNeuralNetwork:
     """deep neural network"""
     def __init__(self, nx, layers):
@@ -87,7 +88,8 @@ class DeepNeuralNetwork:
             if l > 1:
                 dZ = dA * (A_prev * (1 - A_prev))
 
-    def train(self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True, step=100):
+    def train(self, X, Y, iterations=5000, alpha=0.05, 
+              verbose=True, graph=True, step=100):
         """Trains the deep neural network"""
         if not isinstance(iterations, int):
             raise TypeError("iterations must be an integer")
@@ -123,7 +125,7 @@ class DeepNeuralNetwork:
                 if verbose:
                     print(f"Cost after {i} iterations: {cost}")
 
-        if graph: 
+        if graph:
             plt.plot(iterations_list, costs, 'b-')
             plt.xlabel('Iteration')
             plt.ylabel('Cost')
