@@ -6,5 +6,5 @@ import numpy as np
 def update_variables_momentum(alpha, beta1, var, grad, v):
     """momentum func"""
     n = beta1 * v + (1 - beta1) * grad
-    r = var - alpha * new_v
+    r = var - alpha * n
     return r, n
