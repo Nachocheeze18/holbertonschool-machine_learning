@@ -6,11 +6,13 @@ import tensorflow as tf
 
 def create_batch_norm_layer(prev, n, activation):
     """layer batch"""
-    layer = tf.layers.Dense(units=n, kernel_initializer=tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG"))
-    z = layer(prev)
-    batch = tf.layers.batch_normalization(z, epsilon=1e-8, trainable=True)
+    cont = tf.compat.v1.keras.initializers.VarianceScaling(mode="fan_avg")
+    den_lay = tf.compat.v1.layers.dense(inputs=prev, units=n, kernel_initializer=cont)
+    mean, var = tf.nn.moments(den_lay, axes=0)
     gamma = tf.Variable(tf.ones([n]))
     beta = tf.Variable(tf.zeros([n]))
-    z = gamma * batch + beta
-    output = activation(z)
-    return output
+    epsilon = 1e-8
+    Z = tf.nn.batch_normalization(
+        den_lay, mean, var, beta, gamma, epsilon
+    )
+    return activation(Z)
