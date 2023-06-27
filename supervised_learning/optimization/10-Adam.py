@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""train"""
+"""train with adam algorithm"""
 
 import tensorflow as tf
 
