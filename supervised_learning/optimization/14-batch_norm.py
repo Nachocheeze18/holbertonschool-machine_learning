@@ -9,7 +9,8 @@ def create_batch_norm_layer(prev, n, activation):
     dense_layer = tf.layers.Dense(
         units=n,
         activation=None,
-        kernel_initializer=tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG")
+        kernel_initializer=tf.contrib.layers.variance_scaling_initializer
+        (mode="FAN_AVG")
     )
     dense_output = dense_layer(prev)
     gamma = tf.Variable(tf.ones([n]), name="gamma")
@@ -23,5 +24,8 @@ def create_batch_norm_layer(prev, n, activation):
         gamma,
         1e-8
     )
-    activated_output = activation(normalized_output) if activation is not None else normalized_output
+    activated_output = activation(normalized_output)
+    if activation is not None: 
+        else:
+    normalized_output
     return activated_output
