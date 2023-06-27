@@ -6,7 +6,8 @@ import tensorflow as tf
 
 def create_batch_norm_layer(prev, n, activation):
     """layer batch"""
-    layer = tf.layers.Dense(units=n, activation=None, kernel_initializer=tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG"))
+    layer = tf.layers.Dense(units=n, activation=None,
+                            kernel_initializer=tf.contrib.layers.variance_scaling_initializer(mode="FAN_AVG"))
     output = layer(prev)
 
     gamma = tf.Variable(tf.ones([n]), name="gamma")
@@ -14,8 +15,9 @@ def create_batch_norm_layer(prev, n, activation):
 
     mean, variance = tf.nn.moments(output, axes=[0])
 
-    normalized_output = tf.nn.batch_normalization(output, mean, variance, beta, gamma, 1e-8)
+    normal_op = tf.nn.batch_normalization
+    (output, mean, variance, beta, gamma, 1e-8)
 
-    activated_output = activation(normalized_output) if activation is not None else normalized_output
+    activate_op = activation(normal_op)if activation is not None else normal_op
 
-    return activated_output
+    return activate_op
