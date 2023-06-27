@@ -16,7 +16,7 @@ def create_batch_norm_layer(prev, n, activation):
     gamma = tf.Variable(tf.ones([n]), name="gamma")
     beta = tf.Variable(tf.zeros([n]), name="beta")
     mean, variance = tf.nn.moments(dense_output, axes=[0])
-    normalized_output = tf.nn.batch_normalization(
+    normal = tf.nn.batch_normalization(
         dense_output,
         mean,
         variance,
@@ -24,8 +24,5 @@ def create_batch_norm_layer(prev, n, activation):
         gamma,
         1e-8
     )
-    activated_output = activation(normalized_output)
-    if activation is not None: 
-        else:
-    normalized_output
-    return activated_output
+    activate = activation(normal)if activation is not None else normal
+    return activate
