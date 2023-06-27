@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Adam"""
 
-import matplotlib as plt
 import numpy as np
 
 
