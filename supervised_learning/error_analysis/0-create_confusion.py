@@ -6,14 +6,16 @@ import numpy as np
 
 def create_confusion_matrix(labels, logits):
     """frequency and instances"""
-    l1 = labels.shape[1]
-    l2 = logits.shape[1]
+    num_samples, num_classes = labels.shape
 
-    matrix = np.zeros((l1, l2))
+    true_labels = np.argmax(labels, axis=1)
+    predicted_labels = np.argmax(logits, axis=1)
 
-    prediction = np.argmax(logits, axis=1)
-    actual = np.argmax(labels, axis=1)
+    confusion_matrix = np.zeros((num_classes, num_classes), dtype=np.int32)
 
-    matrix[np.arange(len(actual)), prediction] += 1
+    for sample_idx in range(num_samples):
+        true_label_idx = true_labels[sample_idx]
+        predicted_label_idx = predicted_labels[sample_idx]
+        confusion_matrix[true_label_idx, predicted_label_idx] += 1
 
-    return matrix
+    return confusion_matrix
