@@ -11,5 +11,5 @@ def create_confusion_matrix(labels, logits):
     for i in range(labels.shape[0]):
         true = np.argmax(labels[i])
         predicted = np.argmax(logits[i])
-        confusion[true][predicted] += 1
+        confusion[true][predicted] += 1.
     return confusion
