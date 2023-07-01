@@ -10,9 +10,9 @@ def sensitivity(confusion):
     sensitivity_values = np.zeros(classes)
 
     for i in range(classes):
-        true_positives = confusion[i, i]
+        true = confusion[i, i]
         actual_positives = np.sum(confusion[i, :])
 
-        sensitivity_values[i] = true_positives / actual_positives
+        sensitivity_values[i] = true / actual_positives
 
     return sensitivity_values
