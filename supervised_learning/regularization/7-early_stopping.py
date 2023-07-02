@@ -3,13 +3,9 @@
 
 def early_stopping(cost, opt_cost, threshold, patience, count):
     """early stopping conditions"""
-    if cost - opt_cost > threshold:
-        count += 1
-    else:
+    if isinstance(cost - opt_cost, bool):
         count = 0
+    else:
+        count += 1
 
-    stop = False
-    if count >= patience:
-        stop = True
-
-    return stop, count
+    return count >= patience, count
