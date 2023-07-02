@@ -13,7 +13,7 @@ def dropout_forward_prop(X, weights, L, keep_prob):
         b = weights["b{}".format(layer)]
         Z = np.matmul(W, cache["A{}".format(layer - 1)]) + b
 
-        if isinstance(layer, L):
+        if layer == L:
             A = np.exp(Z) / np.sum(np.exp(Z), axis=0, keepdims=True)
         else:
             A = np.tanh(Z)
