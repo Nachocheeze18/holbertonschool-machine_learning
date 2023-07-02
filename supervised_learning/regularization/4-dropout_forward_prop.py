@@ -6,28 +6,21 @@ import numpy as np
 
 def dropout_forward_prop(X, weights, L, keep_prob):
     """forward prop using dropout"""
-    cache = {}
-    A = X
+    cache = {'A0': X}
 
-    for l in range(1, L):
-        W = weights["W" + str(l)]
-        b = weights["b" + str(l)]
-        Z = np.dot(W, A) + b
-        A = np.tanh(Z)
-        D = np.random.rand(A.shape[0], A.shape[1])
-        D = (D < keep_prob).astype(int)
-        A *= D
-        A /= keep_prob
-        cache["Z" + str(l)] = Z
-        cache["A" + str(l)] = A
-        cache["D" + str(l)] = D
+    for layer in range(1, L + 1):
+        W = weights["W{}".format(layer)]
+        b = weights["b{}".format(layer)]
+        Z = np.matmul(W, cache["A{}".format(layer - 1)]) + b
 
-    W = weights["W" + str(L)]
-    b = weights["b" + str(L)]
-    Z = np.dot(W, A) + b
-    exp_Z = np.exp(Z)
-    A = exp_Z / np.sum(exp_Z, axis=0)
-    cache["Z" + str(L)] = Z
-    cache["A" + str(L)] = A
+        if isinstance(layer, L):
+            A = np.exp(Z) / np.sum(np.exp(Z), axis=0, keepdims=True)
+        else:
+            A = np.tanh(Z)
+            D = np.random.rand(*A.shape) < keep_prob
+            A *= D / keep_prob
+            cache["D{}".format(layer)] = D
+
+        cache["A{}".format(layer)] = A
 
     return cache
