@@ -6,17 +6,14 @@ import tensorflow as tf
 
 def dropout_create_layer(prev, n, activation, keep_prob):
     """creates layer using dropout"""
-    reg = tf.layers.Dropout(rate=keep_prob)
-    init = tf.contrib.layers.variance_scaling_initializer(
-        mode="FAN_AVG"
-    )
+    reg = tf.keras.layers.Dropout(rate=keep_prob)
+    init = tf.keras.initializers.VarianceScaling(mode="fan_avg")
 
-    layer = tf.layers.dense(
-        inputs=prev,
+    layer = tf.keras.layers.Dense(
         units=n,
         activation=activation,
         kernel_regularizer=reg,
         kernel_initializer=init
-    )
+    )(prev)
 
     return layer
