@@ -10,4 +10,3 @@ def l2_reg_cost(cost):
     total_cost = (cost + loss)
 
     return total_cost
-
