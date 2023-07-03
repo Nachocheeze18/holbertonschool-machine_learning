@@ -7,13 +7,15 @@ import tensorflow.keras as K
 
 def build_model(nx, layers, activations, lambtha, keep_prob):
     """Keras library"""
-    inputs = k.Input(shape=(nx,))
-    x = inputs
+    model = k.models.Sequential()
 
-    for units, activation in zip(layers, activations):
-        x = k.layers.Dense(units, activation=activation,
-                           kernel_regularizer=k.regularizers.l2(lambtha))(x)
-        x = k.layers.Dropout(1 - keep_prob)(x)
+    model.add(k.layers.Dense(layers[0], activation=activations[0],
+                             input_shape=(nx,),
+                             kernel_regularizer=k.regularizers.l2(lambtha)))
 
-    model = k.Model(inputs=inputs, outputs=x)
+    for units, activation in zip(layers[1:], activations[1:]):
+        model.add(k.layers.Dropout(1 - keep_prob))
+        model.add(k.layers.Dense(units, activation=activation,
+                                 kernel_regularizer=k.regularizers.l2(lambtha)))
+
     return model
