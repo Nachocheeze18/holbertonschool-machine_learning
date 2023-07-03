@@ -7,16 +7,16 @@ import tensorflow.keras as K
 
 def build_model(nx, layers, activations, lambtha, keep_prob):
     """Keras library"""
-    model = K.Sequential()
-    L2_reg = K.regularizers.l2(lambtha)
-
-    model.add(K.layers.Dense(layers[0], activation=activations[0],
-                             kernel_regularizer=L2_reg, input_shape=(nx,)))
-
-    for i in range(1, len(layers)):
-        model.add(K.layers.Dense(layers[i], activation=activations[i],
-                                 kernel_regularizer=L2_reg))
-        model.add(K.layers.Dropout(1 - keep_prob))
-
-    model.summary()
+    model = k.models.Sequential()
+    for i in range(len(layers)):
+        kwargs = {'activation': activations[i]}
+        if i == 0:
+            kwargs['input_shape'] = (nx,)
+            kwargs['kernel_regularizer'] = k.regularizers.l2(lambtha)
+        else:
+            kwargs['kernel_regularizer'] = k.regularizers.l2(lambtha)
+        model.add(k.layers.Dense(layers[i], **kwargs))
+        
+        if i < len(layers) - 1:
+            model.add(k.layers.Dropout(1 - keep_prob))
     return model
