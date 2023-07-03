@@ -15,3 +15,14 @@ def convolve_grayscale_valid(images, kernel):
                 convolved_images[i, j, k] = np.sum(images[i, j:j+kh, k:k+kw] * kernel)
     
     return convolved_images
+
+np.random.seed(0)
+m = np.random.randint(1000, 2000)
+h, w = np.random.randint(100, 200, 2).tolist()
+fh, fw = np.random.randint(3, 10, 2).tolist()
+
+images = np.random.randint(0, 256, (m, h, w))
+kernel = np.random.randint(0, 10, (fh, fw))
+conv_ims = convolve_grayscale_valid(images, kernel)
+print(conv_ims)
+print(conv_ims.shape)
