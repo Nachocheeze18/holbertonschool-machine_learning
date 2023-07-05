@@ -12,7 +12,7 @@ def pool(images, kernel_shape, stride, mode='max'):
     h = images.shape[1]
     w = images.shape[2]
     c = images.shape[3]
-    
+
     kh = kernel_shape[0]
     kw = kernel_shape[1]
 
