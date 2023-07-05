@@ -13,6 +13,7 @@ def convolve(images, kernels, padding='same', stride=(1, 1)):
 
     kh = kernels.shape[0]
     kw = kernels.shape[1]
+    c = kernels.shape[2]
     nc = kernels.shape[3]
 
     sh = stride[0]
