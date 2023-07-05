@@ -5,7 +5,7 @@ import numpy as np
 
 
 def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
-    """"""
+    """convolutions on images with channels"""
     m = images.shape[0]
     h = images.shape[1]
     w = images.shape[2]
