@@ -25,7 +25,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
         ph = 0
         pw = 0
     else:
-        ph = padding[0] 
+        ph = padding[0]
         pw = padding[1]
 
     pad = np.pad(images, ((0, 0), (ph, ph),
