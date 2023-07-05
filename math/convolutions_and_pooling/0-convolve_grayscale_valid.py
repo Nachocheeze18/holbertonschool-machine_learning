@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 def convolve_grayscale_valid(images, kernel):
     """function that performs a valid convolution on grayscale images"""
     m = images.shape[0]
@@ -17,6 +18,6 @@ def convolve_grayscale_valid(images, kernel):
     for j in range(h - kh + 1):
         for k in range(w - kw + 1):
             i = np.multiply(images[:, j:j + kh, k:k + kw], kernel)
-            image[:, j, k] = np.sum(i, axis = (1, 2))
+            image[:, j, k] = np.sum(i, axis=(1, 2))
 
     return image
