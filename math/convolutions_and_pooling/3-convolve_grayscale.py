@@ -30,10 +30,13 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     pad = np.pad(images, ((0, 0), (ph, ph),
                           (pw,  pw)))
 
+    h = (h + 2 * ph - kh) // sh + 1
+    w = (w + 2 * pw - kw) // sw + 1
+
     convolved_images = np.zeros((m, h, w))
 
-    for j in range((h + 2 * ph - kh) // sh + 1):
-        for k in range((w + 2 * pw - kw) // sw + 1):
+    for j in range(h):
+        for k in range(w):
             y = j * sh
             z = k * sw
             img = np.multiply(pad[:, y:y+kh, z:z+kw], kernel)
