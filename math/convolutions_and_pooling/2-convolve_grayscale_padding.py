@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""grayscale"""
+"""padding"""
 import numpy as np
 
 
