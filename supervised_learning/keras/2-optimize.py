@@ -3,6 +3,7 @@
 
 import tensorflow.keras as K
 
+
 def optimize_model(network, alpha, beta1, beta2):
     """Set up Adam optimize and Compile the model with
     categorical crossentropy loss and accuracy metrics"""
