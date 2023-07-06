@@ -11,7 +11,7 @@ def train_model(network, data, labels, batch_size, epochs,
     """
     Train a neural network model using mini-batch gradient descent,
     with optional early stopping and learning rate decay."""
-     callback_list = []
+    callback_list = []
 
     if early_stopping and validation_data is not None:
         early_stopping_callback = K.callbacks.EarlyStopping(
