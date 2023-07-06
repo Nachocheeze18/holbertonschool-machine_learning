@@ -19,9 +19,9 @@ def train_model(network, data, labels, batch_size, epochs,
     validation_data: Optional validation data.
     early_stopping: Boolean indicating whether early stopping should be used.
     patience: Patience used for early stopping.
-    verbose: Boolean that determines if the output should be printed during training.
-    shuffle: Boolean that determines whether to shuffle the batches every epoch.
-    Returns: The trained model.
+    verbose: Boolean that determines if the output should be printed
+    during training.shuffle: Boolean that determines whether to shuffle
+    the batches every epoch. Returns: The trained model.
     """
     callbacks = []
     if early_stopping and validation_data is not None:
