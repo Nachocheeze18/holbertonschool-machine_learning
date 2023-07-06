@@ -11,24 +11,30 @@ def train_model(network, data, labels, batch_size, epochs,
     """
     Train a neural network model using mini-batch gradient descent,
     with optional early stopping and learning rate decay."""
-    callbacks = []
+     callback_list = []
 
     if early_stopping and validation_data is not None:
-        early_stop = K.callbacks.EarlyStopping(monitor='val_loss',
-                                               patience=patience)
-        callbacks.append(early_stop)
+        early_stopping_callback = K.callbacks.EarlyStopping(
+            monitor="val_loss", patience=patience
+        )
+        callback_list.append(early_stopping_callback)
 
     if learning_rate_decay and validation_data is not None:
-        def schedule(epoch, lr):
-            new_lr = alpha / (1 + decay_rate * epoch)
-            print(f"Epoch {epoch + 1:05d}: LearningRateScheduler reducing learning rate to {new_lr:.15f}.")
-            return new_lr
+        def scheduler(epoch):
+            return alpha / (1 + decay_rate * epoch)
 
-        lr_decay = K.callbacks.LearningRateScheduler(schedule)
-        callbacks.append(lr_decay)
+        lr_decay_callback = K.callbacks.LearningRateScheduler(
+            scheduler, verbose=1
+        )
+        callback_list.append(lr_decay_callback)
 
-    return network.fit(x=data, y=labels,
-                       batch_size=batch_size, epochs=epochs,
-                       verbose=verbose, shuffle=shuffle,
-                       validation_data=validation_data,
-                       callbacks=callbacks)
+    return network.fit(
+        x=data,
+        y=labels,
+        batch_size=batch_size,
+        epochs=epochs,
+        verbose=verbose,
+        shuffle=shuffle,
+        validation_data=validation_data,
+        callbacks=callback_list
+    )
