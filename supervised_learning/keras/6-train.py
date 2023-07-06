@@ -20,7 +20,7 @@ def train_model(network, data, labels, batch_size, epochs,
     early_stopping: Boolean indicating whether early stopping should be used.
     patience: Patience used for early stopping.
     verbose: that determines if the output should be printed
-    during training.shuffle: Boolean that determines whether to 
+    during training.shuffle: Boolean that determines whether to
     shuffle the batches every epoch. Returns: The trained model.
     """
     callbacks = []
