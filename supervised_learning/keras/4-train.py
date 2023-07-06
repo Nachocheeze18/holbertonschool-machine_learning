@@ -9,11 +9,7 @@ def train_model(network, data, labels, batch_size,
     """By calling this function, you can train your neural
     network model using mini-batch gradient descent on the
     provided data and labels."""
-    model = network.fit(x=data,
-                       y=labels,
-                       batch_size=batch_size,
-                       epochs=epochs,
-                       verbose=verbose,
-                       shuffle=shuffle,
-                       )
+    model = network.fit(x=data, y=labels,
+                        batch_size=batch_size, epochs=epochs,
+                        verbose=verbose, shuffle=shuffle,)
     return model
