@@ -10,8 +10,9 @@ def train_model(network, data, labels, batch_size, epochs,
                 alpha=0.1, decay_rate=1, save_best=False,
                 filepath=None, verbose=True, shuffle=False):
     """
-    Train a neural network model using mini-batch gradient descent,
-    with optional early stopping, learning rate decay, and saving the best model.
+    Train a neural network model using mini-batch
+    gradient descent, with optional early stopping,
+    learning rate decay, and saving the best model.
     """
     callback_list = []
 
