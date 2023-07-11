@@ -34,10 +34,11 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         ph = 0
         pw = 0
 
-    A_prev_pad = np.pad(
+    A_prev = np.pad(
         A_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)))
     dA_prev = np.pad(
         A_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)))
+
     for img in range(m):
         for h in range(h_new):
             for w in range(w_new):
