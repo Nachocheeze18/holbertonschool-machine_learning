@@ -8,37 +8,30 @@ def conv_forward(A_prev, W, b, activation,
     """performs forward propagation over a
     convolutional layer of a neural network"""
     m, h_prev, w_prev, c_prev = A_prev.shape
-    kh, kw, c_prev, c_new = W.shape
+    kh, kw, _, c_new = W.shape
     sh, sw = stride
 
     if padding == "same":
-        pad_h = int(np.ceil((h_prev * sh - sh + kh - h_prev) / 2))
-        pad_w = int(np.ceil((w_prev * sw - sw + kw - w_prev) / 2))
-    else:
-        pad_h, pad_w = 0, 0
+        ph = int(((h_prev - 1) * sh + kh - h_prev) / 2)
+        pw = int(((w_prev - 1) * sw + kw - w_prev) / 2)
+    else:  # padding == "valid"
+        ph, pw = 0, 0
 
-    h_out = int((h_prev - kh + 2 * pad_h) / sh) + 1
-    w_out = int((w_prev - kw + 2 * pad_w) / sw) + 1
+    h_new = int((h_prev + 2 * ph - kh) / sh) + 1
+    w_new = int((w_prev + 2 * pw - kw) / sw) + 1
 
-    if pad_h > 0 or pad_w > 0:
-        A_prev_pad = np.pad(A_prev, ((0, 0), (pad_h, pad_h),
-                                     (pad_w, pad_w), (0, 0)), mode='constant')
-    else:
-        A_prev_pad = A_prev
+    A_prev_padded = np.pad(A_prev, ((0, 0), (ph, ph),
+                                    (pw, pw), (0, 0)), mode='constant')
+    Z = np.zeros((m, h_new, w_new, c_new))
 
-    Z = np.zeros((m, h_out, w_out, c_new))
-
-    for i in range(m):
-        for h in range(h_out):
-            for w in range(w_out):
-                v_start = h * sh
-                v_end = v_start + kh
-                h_start = w * sw
-                h_end = h_start + kw
-                A_slice = A_prev_pad[i, v_start:v_end, h_start:h_end, :]
-
-                Z[i, h, w, :] = np.sum(A_slice * W[:, :, :, :], axis=(0, 1, 2, 3)) + b[:, :, :, :]
+    for x in range(h_new):
+        for y in range(w_new):
+            for z in range(c_new):
+                i_start, i_end = x * sh, x * sh + kh
+                j_start, j_end = y * sw, y * sw + kw
+                A_slice = A_prev_padded[:, i_start:i_end, j_start:j_end, :]
+                Z[:, x, y, z] = np.sum(A_slice * W[:, :, :, z],
+                                       axis=(1, 2, 3)) + b[:, :, :, z]
 
     A = activation(Z)
-
     return A
