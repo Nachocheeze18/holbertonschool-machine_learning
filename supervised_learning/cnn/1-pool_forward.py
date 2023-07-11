@@ -4,7 +4,9 @@ import numpy as np
 
 
 def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
-    """ performs forward propagation over a pooling layer of a neural network"""
+    """ performs forward propagation over a pooling
+    layer of a neural network"""
+
     m = A_prev.shape[0]
     h_prev = A_prev.shape[1]
     w_prev = A_prev.shape[2]
