@@ -21,7 +21,8 @@ def conv_forward(A_prev, W, b, activation,
     w_out = int((w_prev - kw + 2 * pad_w) / sw) + 1
 
     if pad_h > 0 or pad_w > 0:
-        A_prev_pad = np.pad(A_prev, ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)), mode='constant')
+        A_prev_pad = np.pad(A_prev, ((0, 0), (pad_h, pad_h),
+                                     (pad_w, pad_w), (0, 0)), mode='constant')
     else:
         A_prev_pad = A_prev
 
@@ -37,7 +38,6 @@ def conv_forward(A_prev, W, b, activation,
                 A_slice = A_prev_pad[i, v_start:v_end, h_start:h_end, :]
 
                 Z[i, h, w, :] = np.sum(A_slice * W, axis=(0, 1, 2)) + b
-
 
     A = activation(Z)
 
