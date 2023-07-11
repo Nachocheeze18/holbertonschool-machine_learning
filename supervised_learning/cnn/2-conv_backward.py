@@ -7,45 +7,54 @@ import numpy as np
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     """ performs back propagation over a convolutional
     layer of a neural network"""
-    m, h_new, w_new, c_new = dZ.shape
-    m, h_prev, w_prev, c_prev = A_prev.shape
-    kh, kw, _, _ = W.shape
-    sh, sw = stride
+    m = dZ.shape[0]
+    h_new = dZ.shape[1]
+    w_new = dZ.shape[2]
 
-    if padding == "same":
-        ph = ((h_prev - 1) * sh + kh - h_prev) // 2
-        pw = ((w_prev - 1) * sw + kw - w_prev) // 2
-    elif padding == "valid":
-        ph = 0
-        pw = 0
+    c_new = b.shape[3]
 
-    A_prev_pad = np.pad(A_prev, ((0, 0), (ph, ph),
-                                 (pw, pw), (0, 0)), mode='constant')
-    dA_prev_pad = np.zeros_like(A_prev_pad)
+    h_prev = A_prev.shape[1]
+    w_prev = A_prev.shape[2]
+    c_prev = A_prev.shape[3]
+
+    kh = W.shape[0]
+    kw = W.shape[1]
+
+    sh = stride[0]
+    sw = stride[1]
+
+    dA_prev = np.zeros_like(A_prev)
     dW = np.zeros_like(W)
-    db = np.zeros_like(b)
+    db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
 
-    for i in range(m):
-        for h in range(h_new):
-            for w in range(w_new):
-                for c in range(c_new):
-                    h_start = h * sh
-                    h_end = h_start + kh
-                    w_start = w * sw
-                    w_end = w_start + kw
+    if padding == 'same':
+        pad_top_bottom = (((h_prev - 1) * sh) + kh - h_prev) // 2 + 1
+        pad_left_right = (((w_prev - 1) * sw) + kw - w_prev) // 2 + 1
 
-                    A_slice = A_prev_pad[i, h_start:h_end,
-                                         w_start:w_end, :]
-                    dZ_value = dZ[i, h, w, c]
+    if padding == 'valid':
+        pad_top_bottom = 0
+        pad_left_right = 0
 
-                    dA_prev_pad[i, h_start:h_end, w_start:w_end,
-                                :] += W[:, :, :, c] * dZ_value[:, :, :, np.newaxis]
-                    dW[:, :, :, c] += np.multiply(A_slice, dZ_value)
-                    db[:, :, :, c] += dZ_value
+    A_prev = np.pad(A_prev, ((0, 0), (pad_top_bottom, pad_top_bottom),
+                    (pad_left_right, pad_left_right), (0, 0)))
 
-    if padding == "same":
-        dA_prev = dA_prev_pad[:, ph:-ph, pw:-pw, :]
-    elif padding == "valid":
-        dA_prev = dA_prev_pad
+    dA_prev = np.pad(dA_prev, ((0, 0), (pad_top_bottom, pad_top_bottom),
+                     (pad_left_right, pad_left_right), (0, 0)))
+
+    for image in range(m):
+        for x in range(h_new):
+            for y in range(w_new):
+                for z in range(c_new):
+                    i = x * sh
+                    j = y * sw
+                    dW[:, :, :, z] += np.multiply(
+                        A_prev[image, i:i + kh, j:j + kw, :],
+                        dZ[image, x, y, z])
+                    dA_prev[image, i:i + kh, j:j + kw, :] += (
+                        np.multiply(W[:, :, :, z], dZ[image, x, y, z]))
+
+    if padding == 'same':
+        dA_prev = dA_prev[:, pad_top_bottom:-pad_top_bottom,
+                          pad_left_right:-pad_left_right, :]
 
     return dA_prev, dW, db
