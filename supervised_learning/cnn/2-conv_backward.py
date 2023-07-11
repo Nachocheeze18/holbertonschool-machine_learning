@@ -7,23 +7,10 @@ import numpy as np
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     """ performs back propagation over a convolutional
     layer of a neural network"""
-    m = dZ.shape[0]
-    h_new = dZ.shape[1]
-    w_new = dZ.shape[2]
-    c_new = dZ.shape[3]
-
-    m = A_prev.shape[0]
-    h_prev = A_prev.shape[1]
-    w_prev = A_prev.shape[2]
-    c_prev = A_prev.shape[3]
-
-    kh = W.shape[0]
-    kw = W.shape[1]
-    _ = W.shape[2]
-    _ = W.shape[3]
-
-    sh = stride[0]
-    sw = stride[1]
+    m, h_new, w_new, c_new = dZ.shape
+    m, h_prev, w_prev, c_prev = A_prev.shape
+    kh, kw, _, _ = W.shape
+    sh, sw = stride
 
     if padding == "same":
         ph = ((h_prev - 1) * sh + kh - h_prev) // 2
