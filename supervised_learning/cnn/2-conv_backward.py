@@ -10,21 +10,22 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     m = dZ.shape[0]
     h_new = dZ.shape[1]
     w_new = dZ.shape[2]
-    
+
     c_new = b.shape[3]
 
-    m = A_prev.shape[0]
     h_prev = A_prev.shape[1]
     w_prev = A_prev.shape[2]
     c_prev = A_prev.shape[3]
 
     kh = W.shape[0]
     kw = W.shape[1]
-    c_prev = W.shape[2]
-    c_new = W.shape[3]
 
     sh = stride[0]
     sw = stride[1]
+
+    dA_prev = np.zeros_like(A_prev)
+    dW = np.zeros_like(W)
+    db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
 
     if padding == "same":
         ph = ((h_prev - 1) * sh + kh - h_prev) // 2
@@ -35,7 +36,7 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
 
     A_prev_pad = np.pad(
         A_prev, ((0, 0), (ph, ph), (pw, pw), (0, 0)), mode='constant')
-    dA_prev_pad = np.zeros_like(A_prev_pad)
+    dA_prev = np.zeros_like(A_prev_pad)
     dW = np.zeros_like(W)
     db = np.zeros_like(b)
 
