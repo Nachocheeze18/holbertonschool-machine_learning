@@ -28,33 +28,33 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
 
     if padding == 'same':
-        pad_top_bottom = (((h_prev - 1) * sh) + kh - h_prev) // 2 + 1
-        pad_left_right = (((w_prev - 1) * sw) + kw - w_prev) // 2 + 1
+        ph = (((h_prev - 1) * sh) + kh - h_prev) // 2 + 1
+        pw = (((w_prev - 1) * sw) + kw - w_prev) // 2 + 1
 
     if padding == 'valid':
-        pad_top_bottom = 0
-        pad_left_right = 0
+        ph = 0
+        pw = 0
 
-    A_prev = np.pad(A_prev, ((0, 0), (pad_top_bottom, pad_top_bottom),
-                    (pad_left_right, pad_left_right), (0, 0)))
+    A_prev = np.pad(A_prev, ((0, 0), (ph, ph),
+                    (pw, pw), (0, 0)))
 
-    dA_prev = np.pad(dA_prev, ((0, 0), (pad_top_bottom, pad_top_bottom),
-                     (pad_left_right, pad_left_right), (0, 0)))
+    dA_prev = np.pad(dA_prev, ((0, 0), (ph, ph),
+                     (pw, pw), (0, 0)))
 
-    for image in range(m):
-        for x in range(h_new):
-            for y in range(w_new):
-                for z in range(c_new):
-                    i = x * sh
-                    j = y * sw
-                    dW[:, :, :, z] += np.multiply(
-                        A_prev[image, i:i + kh, j:j + kw, :],
-                        dZ[image, x, y, z])
-                    dA_prev[image, i:i + kh, j:j + kw, :] += (
-                        np.multiply(W[:, :, :, z], dZ[image, x, y, z]))
+    for img in range(m):
+        for h in range(h_new):
+            for w in range(w_new):
+                for c in range(c_new):
+                    i = h * sh
+                    j = w * sw
+                    dW[:, :, :, c] += np.multiply(
+                        A_prev[img, i:i + kh, j:j + kw, :],
+                        dZ[img, h, w, c])
+                    dA_prev[img, i:i + kh, j:j + kw, :] += (
+                        np.multiply(W[:, :, :, c], dZ[img, h, w, c]))
 
     if padding == 'same':
-        dA_prev = dA_prev[:, pad_top_bottom:-pad_top_bottom,
-                          pad_left_right:-pad_left_right, :]
+        dA_prev = dA_prev[:, ph:-ph,
+                          pw:-pw, :]
 
     return dA_prev, dW, db
