@@ -10,7 +10,8 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     m = dZ.shape[0]
     h_new = dZ.shape[1]
     w_new = dZ.shape[2]
-    c_new = dZ.shape[3]
+    
+    c_new = b.shape[3]
 
     m = A_prev.shape[0]
     h_prev = A_prev.shape[1]
@@ -38,27 +39,20 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     dW = np.zeros_like(W)
     db = np.zeros_like(b)
 
-    for i in range(m):
+    for img in range(m):
         for h in range(h_new):
             for w in range(w_new):
                 for c in range(c_new):
-                    h_start = h * sh
-                    h_end = h_start + kh
-                    w_start = w * sw
-                    w_end = w_start + kw
+                    i = h * sh
+                    j = w * sw
+                    dW[:, :, :, c] += np.multiply(
+                        A_prev[img, i:i + kh, j:j + kw, :],
+                        dZ[img, h, w, c])
+                    dA_prev[img, i:i + kh, j:j + kw, :] += (
+                        np.multiply(W[:, :, :, c], dZ[img, h, w, c]))
 
-                    A_slice = A_prev_pad[i, h_start:h_end, w_start:w_end, :]
-                    dZ_value = dZ[i, h, w, c]
-
-                    dA_prev_pad[i, h_start:h_end, w_start:w_end,
-                                :] += np.sum(W[:, :, :, c] * dZ_value,
-                                             axis=(0, 1, 2))
-                    dW[:, :, :, c] += A_slice * dZ_value
-                    db[:, :, :, c] += dZ_value
-
-    if padding == "same":
-        dA_prev = dA_prev_pad[:, ph:-ph, pw:-pw, :]
-    elif padding == "valid":
-        dA_prev = dA_prev_pad
+    if padding == 'same':
+        dA_prev = dA_prev[:, ph:-ph,
+                          pw:-pw, :]
 
     return dA_prev, dW, db
