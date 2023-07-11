@@ -8,7 +8,7 @@ def conv_forward(A_prev, W, b, activation,
     """performs forward propagation over a
     convolutional layer of a neural network"""
     m, h_prev, w_prev, c_prev = A_prev.shape
-    kh, kw, _, c_new = W.shape
+    kh, kw, c_prev, c_new = W.shape
     sh, sw = stride
 
     if padding == "same":
@@ -37,7 +37,7 @@ def conv_forward(A_prev, W, b, activation,
                 h_end = h_start + kw
                 A_slice = A_prev_pad[i, v_start:v_end, h_start:h_end, :]
 
-                Z[i, h, w, :] = np.sum(A_slice * W, axis=(0, 1, 2)) + b[:, :, :, 0]
+                Z[i, h, w, :] = np.sum(A_slice * W[:, :, :, :], axis=(0, 1, 2, 3)) + b[:, :, :, :]
 
     A = activation(Z)
 
