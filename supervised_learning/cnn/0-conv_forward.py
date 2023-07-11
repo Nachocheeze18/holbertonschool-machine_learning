@@ -28,6 +28,8 @@ def conv_forward(A_prev, W, b, activation,
 
     Z = np.zeros((m, h_out, w_out, c_new))
 
+    b_reshaped = b.reshape((1, 1, 1, c_new))
+
     for i in range(m):
         for h in range(h_out):
             for w in range(w_out):
@@ -37,7 +39,7 @@ def conv_forward(A_prev, W, b, activation,
                 h_end = h_start + kw
                 A_slice = A_prev_pad[i, v_start:v_end, h_start:h_end, :]
 
-                Z[i, h, w, :] = np.sum(A_slice * W, axis=(0, 1, 2)) + b
+                Z[i, h, w, :] = np.sum(A_slice * W, axis=(0, 1, 2)) + b_reshaped
 
     A = activation(Z)
 
