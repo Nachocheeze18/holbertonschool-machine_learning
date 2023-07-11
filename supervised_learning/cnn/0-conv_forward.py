@@ -1,6 +1,12 @@
+#!/usr/bin/env python3
+"""forward prop"""
 import numpy as np
 
-def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
+
+def conv_forward(A_prev, W, b, activation,
+                 padding="same", stride=(1, 1)):
+    """performs forward propagation over a
+    convolutional layer of a neural network"""
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, _, c_new = W.shape
     sh, sw = stride
