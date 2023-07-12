@@ -17,7 +17,8 @@ def lenet5(x, y):
     p1 = tf.layers.max_pooling2d(inputs=c1,
                                  pool_size=2, strides=2)
 
-    c2 = tf.layers.conv2d(inputs=p1, filters=16, kernel_size=5, padding="valid",
+    c2 = tf.layers.conv2d(inputs=p1, filters=16, kernel_size=5,
+                          padding="valid",
                           activation=tf.nn.relu,
                           kernel_initializer=tf.
                           contrib.layers.variance_scaling_initializer())
@@ -36,8 +37,8 @@ def lenet5(x, y):
                           variance_scaling_initializer())
 
     log = tf.layers.dense(inputs=fc2, units=10, activation=None,
-                             kernel_initializer=tf.contrib.layers.
-                             variance_scaling_initializer())
+                          kernel_initializer=tf.contrib.layers.
+                          variance_scaling_initializer())
 
     s_out = tf.nn.softmax(log)
 
@@ -45,7 +46,7 @@ def lenet5(x, y):
                           softmax_cross_entropy_with_logits
                           (labels=y, logits=log))
 
-    c_pred= tf.equal(tf.argmax(s_out, 1), tf.argmax(y, 1))
+    c_pred = tf.equal(tf.argmax(s_out, 1), tf.argmax(y, 1))
 
     acc = tf.reduce_mean(tf.cast(c_pred, tf.float32))
 
