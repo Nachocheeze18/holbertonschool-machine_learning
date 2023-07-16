@@ -14,17 +14,20 @@ def identity_block(A_prev, filters):
 
     init = K.initializers.he_normal()
 
-    c1 = K.layers.Conv2D(filters=F11, kernel_size=(1, 1), strides=1, padding='same',
-                            kernel_initializer=init)(A_prev)
+    c1 = K.layers.Conv2D(filters=F11, kernel_size=(1, 1),
+                         strides=1, padding='same',
+                         kernel_initializer=init)(A_prev)
     bn1 = K.layers.BatchNormalization(axis=3)(c1)
     r1 = K.layers.ReLU()(bn1)
 
-    c2 = K.layers.Conv2D(filters=F3, kernel_size=(3, 3), strides=1, padding='same',
-                            kernel_initializer=init)(r1)
+    c2 = K.layers.Conv2D(filters=F3, kernel_size=(3, 3),
+                         strides=1, padding='same',
+                         kernel_initializer=init)(r1)
     bn2 = K.layers.BatchNormalization(axis=3)(c2)
     r2 = K.layers.ReLU()(bn2)
 
-    conv3 = K.layers.Conv2D(filters=F12, kernel_size=(1, 1), strides=1, padding='same',
+    conv3 = K.layers.Conv2D(filters=F12, kernel_size=(1, 1),
+                            strides=1, padding='same',
                             kernel_initializer=init)(r2)
     bn3 = K.layers.BatchNormalization(axis=3)(conv3)
 
