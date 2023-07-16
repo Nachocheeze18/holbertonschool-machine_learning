@@ -19,39 +19,39 @@ def projection_block(A_prev, filters, s=2):
     F11, F3, F12 = filters
 
     c1 = K.layers.Conv2D(filters=F11,
-                                kernel_size=(1, 1),
-                                strides=s,
-                                padding='same',
-                                kernel_initializer='he_normal'
-                                )(A_prev)
+                         kernel_size=(1, 1),
+                         strides=s,
+                         padding='same',
+                         kernel_initializer='he_normal'
+                         )(A_prev)
 
     b0 = K.layers.BatchNormalization(axis=3)(c1)
 
     r0 = K.layers.ReLU()(b0)
 
     c3 = K.layers.Conv2D(filters=F3,
-                                kernel_size=(3, 3),
-                                strides=1,
-                                padding='same',
-                                kernel_initializer='he_normal')(r0)
+                         kernel_size=(3, 3),
+                         strides=1,
+                         padding='same',
+                         kernel_initializer='he_normal')(r0)
 
     b1 = K.layers.BatchNormalization(axis=3)(c3)
 
     r1 = K.layers.ReLU()(b1)
 
     c1x1 = K.layers.Conv2D(filters=F12,
-                                kernel_size=(1, 1),
-                                strides=1,
-                                padding='same',
-                                kernel_initializer='he_normal')(r1)
+                           kernel_size=(1, 1),
+                           strides=1,
+                           padding='same',
+                           kernel_initializer='he_normal')(r1)
 
     b2 = K.layers.BatchNormalization(axis=3)(c1x1)
 
     c1x1_short = K.layers.Conv2D(filters=F12,
-                                       kernel_size=(1, 1),
-                                       strides=s,
-                                       padding='same',
-                                       kernel_initializer='he_normal')(A_prev)
+                                 kernel_size=(1, 1),
+                                 strides=s,
+                                 padding='same',
+                                 kernel_initializer='he_normal')(A_prev)
 
     batch_short = K.layers.BatchNormalization(axis=3)(c1x1_short)
 
