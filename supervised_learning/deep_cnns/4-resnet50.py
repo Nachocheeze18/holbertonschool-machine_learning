@@ -15,13 +15,12 @@ def resnet50():
     Recognition" paper. The function returns the constructed ResNet-50
     model using Keras."""
     inputs = K.Input(shape=(224, 224, 3))
-    init = K.initializers.he_normal()
 
     c1 = K.layers.Conv2D(filters=64,
                             kernel_size=(7, 7),
                             strides=2,
                             padding='same',
-                            kernel_initializer=init
+                            kernel_initializer='he_normal'
                             )(inputs)
 
     b_1 = K.layers.BatchNormalization(axis=3)(c1)
