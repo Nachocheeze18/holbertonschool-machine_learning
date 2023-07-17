@@ -49,10 +49,9 @@ def inception_network():
 
     x = inception_block(x, [128, 128, 192, 32, 96, 64])
 
-    x = K.layers.MaxPooling2D(pool_size=(3, 3),
-                                     strides=2,
-                                     padding='same'
-                                     )(x)
+    x = K.layers.MaxPooling2D((3, 3),
+                              strides=(2, 2),
+                              padding='same')(x)
 
     x = inception_block(x, [192, 96, 208, 16, 48, 64])
 
@@ -64,19 +63,15 @@ def inception_network():
 
     x = inception_block(x, [256, 160, 320, 32, 128, 128])
 
-    x = K.layers.MaxPooling2D(pool_size=(3, 3),
-                                     strides=2,
-                                     padding='same'
-                                     )(x)
+    x = K.layers.MaxPooling2D((3, 3),
+                              strides=(2, 2),
+                              padding='same')(x)
 
     x = inception_block(x, [256, 160, 320, 32, 128, 128])
 
     x = inception_block(x, [384, 192, 384, 48, 128, 128])
 
-    x = K.layers.AveragePooling2D(pool_size=(7, 7),
-                                         strides=1,
-                                         padding='valid'
-                                         )(x)
+    x = K.layers.GlobalAveragePooling2D()(x)
 
     x = K.layers.Dropout(.4)(x)
 
