@@ -15,84 +15,84 @@ def inception_network():
     """
     inputs = K.Input(shape=(224, 224, 3))
 
-    c7 = K.layers.Conv2D(filters=64,
+    x = K.layers.Conv2D(filters=64,
                          kernel_size=(7, 7),
                          strides=2,
                          padding='same',
                          activation='relu'
                          )(inputs)
 
-    Max3 = K.layers.MaxPooling2D(pool_size=(3, 3),
+    x = K.layers.MaxPooling2D(pool_size=(3, 3),
                                  strides=2,
                                  padding='same'
-                                 )(c7)
+                                 )(x)
 
-    c1 = K.layers.Conv2D(filters=64,
+    x = K.layers.Conv2D(filters=64,
                          kernel_size=(1, 1),
                          padding='valid',
                          activation='relu'
-                         )(Max3)
+                         )(x)
 
-    c3 = K.layers.Conv2D(filters=192,
+    x = K.layers.Conv2D(filters=192,
                          kernel_size=(3, 3),
                          strides=1,
                          padding='same',
                          activation='relu'
-                         )(c1)
+                         )(x)
 
-    Max3x3 = K.layers.MaxPooling2D(pool_size=(3, 3),
+    x = K.layers.MaxPooling2D(pool_size=(3, 3),
                                    strides=2,
                                    padding='same'
-                                   )(c3)
+                                   )(x)
 
-    i_layer_0 = inception_block(Max3x3,
+    x = inception_block(x,
                                 [64, 96, 128, 16, 32, 32])
 
-    i_layer_1 = inception_block(i_layer_0,
+    x = inception_block(x,
                                 [128, 128, 192, 32, 96, 64])
 
-    Max3x3_1 = K.layers.MaxPooling2D(pool_size=(3, 3),
+    x = K.layers.MaxPooling2D(pool_size=(3, 3),
                                      strides=2,
                                      padding='same'
-                                     )(i_layer_1)
+                                     )(x)
 
-    i_layer_2 = inception_block(Max3x3_1,
+    x = inception_block(x,
                                 [192, 96, 208, 16, 48, 64])
 
-    i_layer_3 = inception_block(i_layer_2,
+    x = inception_block(x,
                                 [160, 112, 224, 24, 64, 64])
 
-    i_layer_4 = inception_block(i_layer_3,
+    x = inception_block(x,
                                 [128, 128, 256, 24, 64, 64])
 
-    i_layer_5 = inception_block(i_layer_4,
+    x = inception_block(x,
                                 [112, 144, 288, 32, 64, 64])
 
-    i_layer_6 = inception_block(i_layer_5,
+    x = inception_block(x,
                                 [256, 160, 320, 32, 128, 128])
 
-    Max3x3_2 = K.layers.MaxPooling2D(pool_size=(3, 3),
+    x = K.layers.MaxPooling2D(pool_size=(3, 3),
                                      strides=2,
                                      padding='same'
-                                     )(i_layer_6)
+                                     )(x)
 
-    i_layer_7 = inception_block(Max3x3_2,
+    x = inception_block(x,
                                 [256, 160, 320, 32, 128, 128])
 
-    i_layer_8 = inception_block(i_layer_7,
+    x = inception_block(x,
                                 [384, 192, 384, 48, 128, 128])
 
-    AvgPool7 = K.layers.AveragePooling2D(pool_size=(7, 7),
+    x = K.layers.AveragePooling2D(pool_size=(7, 7),
                                          strides=1,
                                          padding='valid'
-                                         )(i_layer_8)
+                                         )(x)
 
-    dropout = K.layers.Dropout(.4)(AvgPool7)
+    x = K.layers.Dropout(.4)(x)
 
-    softmax = K.layers.Dense(units=1000,
+    x = K.layers.Dense(units=1000,
                              activation='softmax'
-                             )(dropout)
+                             )(x)
 
-    model = K.Model(inputs=inputs, outputs=softmax)
+    model = K.Model(inputs=inputs, outputs=x)
 
     return model
