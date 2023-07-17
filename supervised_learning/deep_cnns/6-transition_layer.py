@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-""""""
+"""builds a transition layer as described in Densely Connected Convolutional Networks:"""
 
 import tensorflow.keras as K
 
 
 def transition_layer(X, nb_filters, compression):
-    """Function that builds a transition layer"""
+    """ implements a transition layer in a densely connected convolutional
+    network by applying batch normalization, ReLU activation, 1x1
+    convolution, and 2x2 average pooling to the input tensor, while
+    reducing the number of filters and downscaling the spatial dimensions
+    of the output."""
     X = K.layers.BatchNormalization()(X)
     X = K.layers.Activation('relu')(X)
 
