@@ -22,7 +22,7 @@ def resnet50():
                         kernel_size=(7, 7),
                         strides=2,
                         padding='same',
-                        kernel_initializer=init
+                        kernel_initializer='he_normal'
                         )(input_layer)
 
     x = K.layers.BatchNormalization(axis=3)(x)
@@ -63,4 +63,4 @@ def resnet50():
                        activation='softmax'
                        )(x)
 
-    return K.Model(inputs=input, outputs=softmax)
+    return K.Model(inputs=input, outputs=x)
