@@ -18,39 +18,49 @@ def resnet50():
 
     input_layer = K.Input(shape=input)
 
-    z = K.layers.Conv2D(64, (7, 7), strides=(
-        2, 2), padding='same',
-        kernel_initializer='he_normal')(input_layer)
+    x = K.layers.Conv2D(filters=64,
+                        kernel_size=(7, 7),
+                        strides=2,
+                        padding='same',
+                        kernel_initializer=init
+                        )(input_layer)
 
-    z = K.layers.BatchNormalization(axis=-1)(z)
+    x = K.layers.BatchNormalization(axis=3)(x)
 
-    z = K.layers.Activation('relu')(z)
+    x= K.layers.ReLU()(x)
 
-    z = K.layers.MaxPooling2D((3, 3), strides=(2, 2), padding='same')(z)
+    x = K.layers.MaxPooling2D(pool_size=(3, 3),
+                              strides=2,
+                              padding='same'
+                              )(x)
 
-    z = projection_block(z, filters=(64, 64, 256), s=1)
-    z = identity_block(z, filters=(64, 64, 256))
-    z = identity_block(z, filters=(64, 64, 256))
+    x = projection_block(x, [64, 64, 256], s=1)
+    x = identity_block(x, [64, 64, 256])
+    x = identity_block(x, [64, 64, 256])
 
-    z = projection_block(z, filters=(128, 128, 512))
-    z = identity_block(z, filters=(128, 128, 512))
-    z = identity_block(z, filters=(128, 128, 512))
-    z = identity_block(z, filters=(128, 128, 512))
+    x = projection_block(x, [128, 128, 512])
+    x = identity_block(x, [128, 128, 512])
+    x = identity_block(x, [128, 128, 512])
+    x = identity_block(x, [128, 128, 512])
 
-    z = projection_block(z, filters=(256, 256, 1024))
-    z = identity_block(z, filters=(256, 256, 1024))
-    z = identity_block(z, filters=(256, 256, 1024))
-    z = identity_block(z, filters=(256, 256, 1024))
-    z = identity_block(z, filters=(256, 256, 1024))
+    x = projection_block(x, [256, 256, 1024])
+    x = identity_block(x, [256, 256, 1024])
+    x = identity_block(x, [256, 256, 1024])
+    x = identity_block(x, [256, 256, 1024])
+    x = identity_block(x, [256, 256, 1024])
+    x = identity_block(x, [256, 256, 1024])
 
-    z = projection_block(z, filters=(512, 512, 2048))
-    z = identity_block(z, filters=(512, 512, 2048))
-    z = identity_block(z, filters=(512, 512, 2048))
+    x = projection_block(x, [512, 512, 2048])
+    x = identity_block(x, [512, 512, 2048])
+    x = identity_block(x, [512, 512, 2048])
 
-    z = K.layers.GlobalAveragePooling2D()(z)
-    z = K.layers.Dense(1000, activation='softmax',
-                       kernel_initializer='he_normal')(z)
+    x = K.layers.AveragePooling2D(pool_size=(7, 7),
+                                  strides=1,
+                                  padding='valid'
+                                  )(x)
 
-    model = K.Model(inputs=input_layer, outputs=z)
+    x = K.layers.Dense(units=1000,
+                       activation='softmax'
+                       )(x)
 
-    return model
+    return K.Model(inputs=input, outputs=softmax)
