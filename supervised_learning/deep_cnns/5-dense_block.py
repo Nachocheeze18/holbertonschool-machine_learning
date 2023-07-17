@@ -15,19 +15,19 @@ def dense_block(X, nb_filters, growth_rate, layers):
     i = 0
     while i < layers:
         inter_channel = 4 * growth_rate
-        bottleneck = K.layers.BatchNormalization()(X)
-        bottleneck = K.layers.Activation('relu')(bottleneck)
-        bottleneck = K.layers.Conv2D(
+        b1 = K.layers.BatchNormalization()(X)
+        b1 = K.layers.Activation('relu')(b1)
+        b1 = K.layers.Conv2D(
             inter_channel, (1, 1), padding='same',
-            kernel_initializer='he_normal')(bottleneck)
+            kernel_initializer='he_normal')(b1)
 
-        conv_layer = K.layers.BatchNormalization()(bottleneck)
-        conv_layer = K.layers.Activation('relu')(conv_layer)
-        conv_layer = K.layers.Conv2D(
+        c1 = K.layers.BatchNormalization()(b1)
+        c1 = K.layers.Activation('relu')(c1)
+        c1 = K.layers.Conv2D(
             growth_rate, (3, 3), padding='same',
-            kernel_initializer='he_normal')(conv_layer)
+            kernel_initializer='he_normal')(c1)
 
-        X = K.layers.Concatenate()([X, conv_layer])
+        X = K.layers.Concatenate()([X, c1])
 
         nb_filters += growth_rate
 
