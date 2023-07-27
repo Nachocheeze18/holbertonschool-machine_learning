@@ -78,7 +78,5 @@ def inception_network():
 
     model = K.Model(inputs=inputs, outputs=x)
 
-    model = inception_network()
-    model.summary()
 
     return model
