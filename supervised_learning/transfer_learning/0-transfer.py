@@ -19,7 +19,7 @@ def main():
 
     tf.keras.mixed_precision.set_global_policy('mixed_float16')
 
-    base_model = K.applications.MobileNetV2(weights='imagenet', include_top=False, input_shape=(128, 128, 3))
+    base_model = K.applications.MobileNetV2(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
 
     unfreeze_layers = 100
     for layer in base_model.layers[:-unfreeze_layers]:
@@ -28,7 +28,7 @@ def main():
         layer.trainable = True
 
     model = K.Sequential([
-        K.layers.Lambda(lambda x: tf.image.resize(x, (128, 128))),
+        K.layers.Lambda(lambda x: tf.image.resize(x, (224, 224))),  # Change the input size here
         base_model,
         K.layers.GlobalAveragePooling2D(),
         K.layers.Dense(256, activation='relu'),
@@ -52,9 +52,9 @@ def main():
     early_stopping = K.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
 
     model.fit(
-        train_datagen.flow(X_train, y_train, batch_size=64),
+        train_datagen.flow(X_train, y_train, batch_size=128),  # Increase batch size here
         epochs=7,
-        validation_data=validation_datagen.flow(X_test, y_test, batch_size=64),
+        validation_data=validation_datagen.flow(X_test, y_test, batch_size=128),  # Increase batch size here
         callbacks=[lr_scheduler, early_stopping],
     )
 
