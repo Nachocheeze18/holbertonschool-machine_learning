@@ -27,5 +27,5 @@ class Yolo:
         return class_names
     
     def _load_model(self, model_path):
-        model = tf.keras.models.load_model(model_path)
+        model = tf.compat.v2.saved_model.load(model_path)
         return model
