@@ -44,8 +44,9 @@ class Yolo:
         image_height, image_width = image_size
 
         for i in range(len(boxes)):
-            grid_width, grid_height, anchor_boxes = outputs[i].shape[1],
-            outputs[i].shape[0], outputs[i].shape[2]
+            grid_width = outputs[i].shape[1]
+            grid_height = outputs[i].shape[0]
+            anchor_boxes = outputs[i].shape[2]
             for j in range(grid_height):
                 for k in range(grid_width):
                     for l in range(anchor_boxes):
