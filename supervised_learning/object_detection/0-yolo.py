@@ -2,6 +2,7 @@
 """imports"""
 import numpy as np
 import tensorflow.keras as K
+from tensorflow.keras.models import load_model
 
 
 class Yolo:
@@ -12,20 +13,19 @@ class Yolo:
         preprocess input images, run object detection on the
         images, and post-process the model's outputs to obtain
         the detected objects and their associated information."""
-        self.model = K.models.load_model(model_path)
-        with open(classes_path) as file:
-            class_names = file.read()
-        self.class_names = class_names.replace("\n", "|").split("|")[:-1]
-        self.class_threshold = class_threshold
-        self.nms_threshold = nms_threshold
+        self.model = self._load_yolo_model(model_path)
+        self.class_names = self._load_classes(classes_path)
+        self.class_t = class_threshold
+        self.nms_t = nms_threshold
         self.anchors = anchors
 
+    def _load_yolo_model(self, model_path):
+        """Loads the YOLO model from a file"""
+        return load_model(model_path)
+
     def _load_classes(self, classes_path):
+        """Loads the classes from a file"""
         with open(classes_path, 'r') as f:
             class_names = f.readlines()
         class_names = [c.strip() for c in class_names]
         return class_names
-    
-    def _load_model(self, model_path):
-        model = tf.compat.v2.saved_model.load(model_path)
-        return model
