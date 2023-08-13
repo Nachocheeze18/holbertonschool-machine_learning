@@ -31,39 +31,42 @@ class Yolo:
         return class_names
 
     def process_outputs(self, outputs, image_size):
-        """Processes YOLO model outputs and returns processed information"""
         boxes = []
         box_confidences = []
         box_class_probs = []
 
         for output in outputs:
             grid_height, grid_width, anchor_boxes, _ = output.shape
-            processed_boxes = np.zeros_like(output[..., :4])
-            processed_box_confidences = output[..., 4:5]
-            processed_box_class_probs = output[..., 5:]
 
-            for y in range(grid_height):
-                for x in range(grid_width):
-                    for b in range(anchor_boxes):
-                        t_x, t_y, t_w, t_h = output[y, x, b, :4]
-                        box_x = (x + self._sigmoid(t_x)) / grid_width
-                        box_y = (y + self._sigmoid(t_y)) / grid_height
-                        box_w = self.anchors[b][0] * np.exp(t_w) / self.model.input.shape[1].value
-                        box_h = self.anchors[b][1] * np.exp(t_h) / self.model.input.shape[2].value
-                        
-                        x1 = (box_x - box_w / 2) * image_size[1]
-                        y1 = (box_y - box_h / 2) * image_size[0]
-                        x2 = x1 + box_w * image_size[1]
-                        y2 = y1 + box_h * image_size[0]
+            # Extract values from the output
+            box_data = output[:, :, :, :4]
+            box_confidence = output[:, :, :, 4:5]
+            box_class_probs_raw = output[:, :, :, 5:]
 
-                        processed_boxes[y, x, b, :] = [x1, y1, x2, y2]
+            # Calculate boundary box coordinates relative to the original image
+            grid_x = np.arange(grid_width)
+            grid_y = np.arange(grid_height)
+            grid_x, grid_y = np.meshgrid(grid_x, grid_y)
+            x_offset = (grid_x + 0.5) / grid_width
+            y_offset = (grid_y + 0.5) / grid_height
+            width_scale = self.anchors[:, 0]
+            height_scale = self.anchors[:, 1]
+            box_data[..., :2] = (box_data[..., :2] + np.stack(
+                (x_offset,
+                 y_offset),
+                 axis=-1)) / (grid_width,
+                              grid_height)
+            box_data[..., 2:4] = np.exp(box_data
+                                        [..., 2:4]) * np.expand_dims(np.stack(
+                (width_scale, height_scale),
+                      axis=-1), axis=(0, 1, 2))
 
-            boxes.append(processed_boxes)
-            box_confidences.append(processed_box_confidences)
-            box_class_probs.append(processed_box_class_probs)
+            # Calculate box probabilities
+            box_class_probs = box_confidence * box_class_probs_raw
+
+            # Append processed values to lists
+            boxes.append(box_data)
+            box_confidences.append(box_confidence)
+            box_class_probs.append(box_class_probs)
 
         return boxes, box_confidences, box_class_probs
-
-    @staticmethod
-    def _sigmoid(x):
-        return 1.0 / (1.0 + np.exp(-x))
