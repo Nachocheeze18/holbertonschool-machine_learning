@@ -74,11 +74,21 @@ class Yolo:
         confident and non-overlapping bounding boxes, returning the
         filtered bounding boxes, their corresponding class indices,
         and confidence scores."""
+    def filter_boxes(self, boxes, box_confidences, box_class_probs):
+        """
+        Filters the boxes based on class scores,
+        class probabilities, and a predefined threshold.
+        """
         filtered_boxes = []
         box_classes = []
         box_scores = []
 
-        for box, confidences, class_probs in zip(boxes, box_confidences, box_class_probs):
+        i = 0
+        while i < len(boxes):
+            box = boxes[i]
+            confidences = box_confidences[i]
+            class_probs = box_class_probs[i]
+
             new_box_scores = confidences * class_probs
             new_box_classes = np.argmax(new_box_scores, axis=-1)
             new_box_scores = np.max(new_box_scores, axis=-1)
@@ -88,6 +98,8 @@ class Yolo:
             filtered_boxes.append(box[mask])
             box_classes.append(new_box_classes[mask])
             box_scores.append(new_box_scores[mask])
+
+            i += 1
 
         filtered_boxes = np.concatenate(filtered_boxes, axis=0)
         box_classes = np.concatenate(box_classes)
