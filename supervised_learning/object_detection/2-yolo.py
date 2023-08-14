@@ -78,31 +78,19 @@ class Yolo:
         box_classes = []
         box_scores = []
 
-        for i in range(len(boxes)):
-            # Flatten the arrays for easier manipulation
-            flat_boxes = boxes[i].reshape(-1, 4)
-            flat_confidences = box_confidences[i].reshape(-1)
-            flat_class_probs = box_class_probs[i].reshape(-1, len(self.class_names))
+        for box, confidences, class_probs in zip(boxes, box_confidences, box_class_probs):
+            new_box_scores = confidences * class_probs
+            new_box_classes = np.argmax(new_box_scores, axis=-1)
+            new_box_scores = np.max(new_box_scores, axis=-1)
 
-            # Apply confidence threshold
-            box_mask = flat_confidences >= self.class_t
+            mask = new_box_scores >= self.class_threshold
 
-            filtered_boxes.extend(flat_boxes[box_mask])
-            box_scores.extend(flat_confidences[box_mask])
-            box_classes.extend(np.argmax(flat_class_probs[box_mask], axis=1))
+            filtered_boxes.append(box[mask])
+            box_classes.append(new_box_classes[mask])
+            box_scores.append(new_box_scores[mask])
 
-        filtered_boxes = np.array(filtered_boxes)
-        box_classes = np.array(box_classes)
-        box_scores = np.array(box_scores)
-
-        # Apply non-maximum suppression to remove overlapping boxes
-        selected_indices = K.backend.image.non_max_suppression(
-            filtered_boxes, box_scores, max_output_size=50,
-            iou_threshold=self.nms_t
-        )
-
-        filtered_boxes = filtered_boxes[selected_indices]
-        box_classes = box_classes[selected_indices]
-        box_scores = box_scores[selected_indices]
+        filtered_boxes = np.concatenate(filtered_boxes, axis=0)
+        box_classes = np.concatenate(box_classes)
+        box_scores = np.concatenate(box_scores)
 
         return filtered_boxes, box_classes, box_scores
