@@ -74,11 +74,6 @@ class Yolo:
         confident and non-overlapping bounding boxes, returning the
         filtered bounding boxes, their corresponding class indices,
         and confidence scores."""
-    def filter_boxes(self, boxes, box_confidences, box_class_probs):
-        """
-        Filters the boxes based on class scores,
-        class probabilities, and a predefined threshold.
-        """
         filtered_boxes = []
         box_classes = []
         box_scores = []
