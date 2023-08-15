@@ -74,7 +74,7 @@ class Yolo:
         confident and non-overlapping bounding boxes, returning the
         filtered bounding boxes, their corresponding class indices,
         and confidence scores."""
-        filtered_boxes = []
+        filtered_boxes = None
         box_classes = []
         box_scores = []
 
