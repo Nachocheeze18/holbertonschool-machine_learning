@@ -98,7 +98,8 @@ class Yolo:
 
         return filtered_boxes, box_classes, box_scores
 
-    def non_max_suppression(self, filtered_boxes, box_classes, box_scores, use_tf=True):
+    def non_max_suppression(self, filtered_boxes,
+                            box_classes, box_scores, use_tf=True):
         """Applies non-maximum suppression to the filtered boxes"""
         unique_classes = np.unique(box_classes)
         box_predictions = []
@@ -133,10 +134,11 @@ class Yolo:
                     predicted_box_classes.append(cls)
                     predicted_box_scores.append(cls_box_scores[max_score_idx])
 
-                    iou = [self.intersection_over_union
-                           (cls_boxes[max_score_idx], box) for box in cls_boxes]
+                    iou = [self.intersection_over_union(cls_boxes[max_score_idx],
+                                                        box) for box in cls_boxes]
                     to_remove = np.where(np.array(iou) > self.nms_t)
-                    cls_boxes = np.delete(cls_boxes, to_remove, axis=0)
+                    cls_boxes = np.delete(cls_boxes,
+                                          to_remove, axis=0)
                     cls_box_scores = np.delete(cls_box_scores, to_remove, axis=0)
 
         box_predictions = np.array(box_predictions)
