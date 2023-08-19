@@ -98,56 +98,40 @@ class Yolo:
 
         return filtered_boxes, box_classes, box_scores
 
-    def non_max_suppression(self, filtered_boxes,
-                            box_classes, box_scores, use_tf=True):
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
         """Applies non-maximum suppression to the filtered boxes"""
         unique_classes = np.unique(box_classes)
         box_predictions = []
         predicted_box_classes = []
         predicted_box_scores = []
 
-        if use_tf:
-            for cls in unique_classes:
-                class_indices = np.where(box_classes == cls)[0]
-                class_boxes = filtered_boxes[class_indices]
-                class_scores = box_scores[class_indices]
+        for cls in unique_classes:
+            idx = np.where(box_classes == cls)
+            class_boxes = filtered_boxes[idx]
+            class_box_scores = box_scores[idx]
 
-                indices = K.image.non_max_suppression(
-                    K.constant(class_boxes),
-                    K.constant(class_scores),
-                    max_output_size=len(class_indices),
-                    iou_threshold=self.nms_t
-                )
+            num_boxes = len(class_boxes)
+            keep_indices = []
 
-                box_predictions.extend(class_boxes[indices])
-                predicted_box_classes.extend(np.full(len(indices), cls))
-                predicted_box_scores.extend(class_scores[indices])
-        else:
-            for cls in unique_classes:
-                idxs = np.where(box_classes == cls)
-                cls_boxes = filtered_boxes[idxs]
-                cls_box_scores = box_scores[idxs]
+            for i in range(num_boxes):
+                max_score_idx = np.argmax(class_box_scores)
+                box_predictions.append(class_boxes[max_score_idx])
+                predicted_box_classes.append(cls)
+                predicted_box_scores.append(class_box_scores[max_score_idx])
 
-                while len(cls_boxes) > 0:
-                    max_score_idx = np.argmax(cls_box_scores)
-                    box_predictions.append(cls_boxes[max_score_idx])
-                    predicted_box_classes.append(cls)
-                    predicted_box_scores.append(cls_box_scores[max_score_idx])
+                iou = [self.intersection_over_union(class_boxes[max_score_idx],
+                                                    box) for box in class_boxes]
+                iou = np.array(iou)
+                to_remove = np.where(iou > self.nms_t)[0]
+                class_box_scores = np.delete(class_box_scores, to_remove)
+                class_boxes = np.delete(class_boxes, to_remove)
+                
+                keep_indices.extend(to_remove)
+                keep_indices.append(max_score_idx)
 
-                    iou = [self.intersection_over_union(cls_boxes[max_score_idx],
-                                                        box) for box in cls_boxes]
-                    to_remove = np.where(np.array(iou) > self.nms_t)
-                    cls_boxes = np.delete(cls_boxes,
-                                          to_remove, axis=0)
-                    cls_box_scores = np.delete(cls_box_scores, to_remove, axis=0)
+            non_max_indices = [idx for idx in range(num_boxes)
+                               if idx not in keep_indices]
+            class_boxes = class_boxes[non_max_indices]
+            class_box_scores = class_box_scores[non_max_indices]
 
-        box_predictions = np.array(box_predictions)
-        predicted_box_classes = np.array(predicted_box_classes)
-        predicted_box_scores = np.array(predicted_box_scores)
-
-        sorted_indices = np.argsort(predicted_box_scores)[::-1]
-        box_predictions = box_predictions[sorted_indices]
-        predicted_box_classes = predicted_box_classes[sorted_indices]
-        predicted_box_scores = predicted_box_scores[sorted_indices]
-
-        return box_predictions, predicted_box_classes, predicted_box_scores
+        return np.array(box_predictions), np.array(predicted_box_classes), np.array(predicted_box_scores)
