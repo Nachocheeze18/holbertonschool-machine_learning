@@ -117,11 +117,13 @@ class Yolo:
                 predicted_box_classes.append(cls)
                 predicted_box_scores.append(class_box_scores[max_score_idx])
 
-                iou = [self.intersection_over_union(class_boxes[max_score_idx],
-                                                    box) for box in class_boxes]
+                iou = [self.intersection_over_union(class_boxes[max_score_idx], box)
+                       for box in class_boxes]
                 iou = np.array(iou)
                 to_remove = np.where(iou > self.nms_t)[0]
-                class_boxes = np.delete(class_boxes, to_remove, axis=0)
-                class_box_scores = np.delete(class_box_scores, to_remove, axis=0)
+                class_boxes = np.delete(class_boxes,
+                                        to_remove, axis=0)
+                class_box_scores = np.delete(class_box_scores,
+                                             to_remove, axis=0)
 
         return np.array(box_predictions), np.array(predicted_box_classes), np.array(predicted_box_scores)
