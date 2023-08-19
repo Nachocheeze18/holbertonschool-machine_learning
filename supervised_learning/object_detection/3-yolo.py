@@ -119,11 +119,9 @@ class Yolo:
 
                 iou = [self.intersection_over_union(class_boxes[max_score_idx],
                                                     box)for box in class_boxes]
-                to_remove = np.where(iou > self.nms_t)
-                class_boxes = np.delete(class_boxes,
-                                        to_remove, axis=0)
-                class_box_scores = np.delete(class_box_scores,
-                                             to_remove, axis=0)
+                to_remove = np.where(np.array(iou) > self.nms_t)
+                cls_boxes = np.delete(cls_boxes, to_remove, axis=0)
+                cls_box_scores = np.delete(cls_box_scores, to_remove, axis=0)
 
         return (np.array(box_predictions),
                 np.array(predicted_box_classes),
