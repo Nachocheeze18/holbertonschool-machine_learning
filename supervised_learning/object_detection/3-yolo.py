@@ -98,28 +98,46 @@ class Yolo:
 
         return filtered_boxes, box_classes, box_scores
 
-    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores, use_tf=True):
         """Applies non-maximum suppression to the filtered boxes"""
         unique_classes = np.unique(box_classes)
         box_predictions = []
         predicted_box_classes = []
         predicted_box_scores = []
 
-        for cls in unique_classes:
-            class_indices = np.where(box_classes == cls)[0]
-            class_boxes = filtered_boxes[class_indices]
-            class_scores = box_scores[class_indices]
+        if use_tf:
+            for cls in unique_classes:
+                class_indices = np.where(box_classes == cls)[0]
+                class_boxes = filtered_boxes[class_indices]
+                class_scores = box_scores[class_indices]
 
-            indices = K.backend.image.non_max_suppression(
-                K.backend.constant(class_boxes),
-                K.backend.constant(class_scores),
-                max_output_size=len(class_indices),
-                iou_threshold=self.nms_t
-            )
+                indices = K.image.non_max_suppression(
+                    K.constant(class_boxes),
+                    K.constant(class_scores),
+                    max_output_size=len(class_indices),
+                    iou_threshold=self.nms_t
+                )
 
-            box_predictions.extend(class_boxes[indices])
-            predicted_box_classes.extend(np.full(len(indices), cls))
-            predicted_box_scores.extend(class_scores[indices])
+                box_predictions.extend(class_boxes[indices])
+                predicted_box_classes.extend(np.full(len(indices), cls))
+                predicted_box_scores.extend(class_scores[indices])
+        else:
+            for cls in unique_classes:
+                idxs = np.where(box_classes == cls)
+                cls_boxes = filtered_boxes[idxs]
+                cls_box_scores = box_scores[idxs]
+
+                while len(cls_boxes) > 0:
+                    max_score_idx = np.argmax(cls_box_scores)
+                    box_predictions.append(cls_boxes[max_score_idx])
+                    predicted_box_classes.append(cls)
+                    predicted_box_scores.append(cls_box_scores[max_score_idx])
+
+                    iou = [self.intersection_over_union
+                           (cls_boxes[max_score_idx], box) for box in cls_boxes]
+                    to_remove = np.where(np.array(iou) > self.nms_t)
+                    cls_boxes = np.delete(cls_boxes, to_remove, axis=0)
+                    cls_box_scores = np.delete(cls_box_scores, to_remove, axis=0)
 
         box_predictions = np.array(box_predictions)
         predicted_box_classes = np.array(predicted_box_classes)
