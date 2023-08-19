@@ -98,38 +98,36 @@ class Yolo:
 
         return filtered_boxes, box_classes, box_scores
 
-def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
-    """Applies non-maximum suppression to the filtered boxes"""
-    unique_classes = np.unique(box_classes)
-    selected_boxes = []
-    selected_classes = []
-    selected_scores = []
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        """Applies non-maximum suppression to the filtered boxes"""
+        unique_classes = np.unique(box_classes)
+        box_predictions = []
+        predicted_box_classes = []
+        predicted_box_scores = []
 
-    for cls in unique_classes:
-
-        class_indices = np.where(box_classes == cls)[0]
+        for cls in unique_classes:
+            class_indices = np.where(box_classes == cls)[0]
+            class_boxes = filtered_boxes[class_indices]
+            class_scores = box_scores[class_indices]
         
-        class_boxes = filtered_boxes[class_indices]
-        class_scores = box_scores[class_indices]
-        
-        indices = K.backend.image.non_max_suppression(
-            K.backend.constant(class_boxes),
-            K.backend.constant(class_scores),
-            max_output_size=len(class_indices),
-            iou_threshold=self.nms_t
-        )
-        
-        selected_boxes.extend(class_boxes[indices])
-        selected_classes.extend(np.full(len(indices), cls))
-        selected_scores.extend(class_scores[indices])
+            indices = K.backend.image.non_max_suppression(
+                K.backend.constant(class_boxes),
+                K.backend.constant(class_scores),
+                max_output_size=len(class_indices),
+                iou_threshold=self.nms_t
+            )
 
-    selected_boxes = np.array(selected_boxes)
-    selected_classes = np.array(selected_classes)
-    selected_scores = np.array(selected_scores)
+            box_predictions.extend(class_boxes[indices])
+            predicted_box_classes.extend(np.full(len(indices), cls))
+            predicted_box_scores.extend(class_scores[indices])
 
-    sorted_indices = np.argsort(selected_scores)[::-1]
-    selected_boxes = selected_boxes[sorted_indices]
-    selected_classes = selected_classes[sorted_indices]
-    selected_scores = selected_scores[sorted_indices]
+        box_predictions = np.array(box_predictions)
+        predicted_box_classes = np.array(predicted_box_classes)
+        predicted_box_scores = np.array(predicted_box_scores)
 
-    return selected_boxes, selected_classes, selected_scores
+        sorted_indices = np.argsort(predicted_box_scores)[::-1]
+        box_predictions = box_predictions[sorted_indices]
+        predicted_box_classes= predicted_box_classes[sorted_indices]
+        predicted_box_scores = predicted_box_scores[sorted_indices]
+
+        return box_predictions, predicted_box_classes, predicted_box_scores
