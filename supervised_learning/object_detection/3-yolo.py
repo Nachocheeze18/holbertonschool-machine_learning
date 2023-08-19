@@ -109,7 +109,7 @@ class Yolo:
             class_indices = np.where(box_classes == cls)[0]
             class_boxes = filtered_boxes[class_indices]
             class_scores = box_scores[class_indices]
-        
+
             indices = K.backend.image.non_max_suppression(
                 K.backend.constant(class_boxes),
                 K.backend.constant(class_scores),
@@ -127,7 +127,7 @@ class Yolo:
 
         sorted_indices = np.argsort(predicted_box_scores)[::-1]
         box_predictions = box_predictions[sorted_indices]
-        predicted_box_classes= predicted_box_classes[sorted_indices]
+        predicted_box_classes = predicted_box_classes[sorted_indices]
         predicted_box_scores = predicted_box_scores[sorted_indices]
 
         return box_predictions, predicted_box_classes, predicted_box_scores
