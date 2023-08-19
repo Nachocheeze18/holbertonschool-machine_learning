@@ -98,7 +98,8 @@ class Yolo:
 
         return filtered_boxes, box_classes, box_scores
 
-    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+    def non_max_suppression(self, filtered_boxes,
+                            box_classes, box_scores):
         """Applies non-maximum suppression to the filtered boxes"""
         unique_classes = np.unique(box_classes)
         box_predictions = []
@@ -110,10 +111,7 @@ class Yolo:
             class_boxes = filtered_boxes[idx]
             class_box_scores = box_scores[idx]
 
-            num_boxes = len(class_boxes)
-            keep_indices = []
-
-            for i in range(num_boxes):
+            while len(class_boxes) > 0:
                 max_score_idx = np.argmax(class_box_scores)
                 box_predictions.append(class_boxes[max_score_idx])
                 predicted_box_classes.append(cls)
@@ -123,15 +121,7 @@ class Yolo:
                                                     box) for box in class_boxes]
                 iou = np.array(iou)
                 to_remove = np.where(iou > self.nms_t)[0]
-                class_box_scores = np.delete(class_box_scores, to_remove)
-                class_boxes = np.delete(class_boxes, to_remove)
-                
-                keep_indices.extend(to_remove)
-                keep_indices.append(max_score_idx)
-
-            non_max_indices = [idx for idx in range(num_boxes)
-                               if idx not in keep_indices]
-            class_boxes = class_boxes[non_max_indices]
-            class_box_scores = class_box_scores[non_max_indices]
+                class_boxes = np.delete(class_boxes, to_remove, axis=0)
+                class_box_scores = np.delete(class_box_scores, to_remove, axis=0)
 
         return np.array(box_predictions), np.array(predicted_box_classes), np.array(predicted_box_scores)
