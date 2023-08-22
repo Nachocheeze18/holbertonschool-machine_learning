@@ -156,6 +156,7 @@ class Yolo:
         """Loads images from a folder and
         returns a tuple of images and their paths"""
         image_paths = [os.path.join(folder_path, img) for
-                       img in os.listdir(folder_path) if img.lower().endswith(('.jpg', '.jpeg', '.png'))]
+                       img in os.listdir(folder_path) if
+                       img.lower().endswith(('.jpg', '.jpeg', '.png'))]
         images = [cv2.imread(image_path) for image_path in image_paths]
         return images, image_paths
