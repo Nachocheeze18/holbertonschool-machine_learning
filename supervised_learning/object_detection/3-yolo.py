@@ -110,7 +110,8 @@ class Yolo:
         y2_overlap = min(box1[3], box2[3])
 
         if x2_overlap > x1_overlap and y2_overlap > y1_overlap:
-            intersection_area = (x2_overlap - x1_overlap) * (y2_overlap - y1_overlap)
+            intersection_area = (x2_overlap - x1_overlap) * (y2_overlap
+                                                             - y1_overlap)
             box1_area = (box1[2] - box1[0]) * (box1[3] - box1[1])
             box2_area = (box2[2] - box2[0]) * (box2[3] - box2[1])
 
@@ -147,4 +148,3 @@ class Yolo:
         return (np.array(box_predictions),
                 np.array(predicted_box_classes),
                 np.array(predicted_box_scores))
-
