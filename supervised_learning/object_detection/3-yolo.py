@@ -138,7 +138,8 @@ class Yolo:
                 predicted_box_classes.append(cls)
                 predicted_box_scores.append(cls_box_scores[max_score_idx])
 
-                iou_scores = [self.intersection_over_union(cls_boxes[max_score_idx], box) for box in cls_boxes]
+                iou_scores = [self.calculate_iou(cls_boxes[max_score_idx], box)
+                              for box in cls_boxes]
                 to_remove = np.where(np.array(iou_scores) > self.nms_t)[0]
                 cls_boxes = np.delete(cls_boxes, to_remove, axis=0)
                 cls_box_scores = np.delete(cls_box_scores, to_remove)
