@@ -161,8 +161,8 @@ class Yolo:
             if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                 image_path = os.path.join(folder_path, filename)
                 image = cv2.imread(image_path)
-                image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
-                images.append(image)
+                image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
+                images.append(image_rgb)
                 image_paths.append(image_path)
 
         return images, image_paths
