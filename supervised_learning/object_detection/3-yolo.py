@@ -98,31 +98,52 @@ class Yolo:
 
         return filtered_boxes, box_classes, box_scores
 
-    def non_max_suppression(self, filtered_boxes,
-                            box_classes, box_scores):
-        """Applies non-maximum suppression to the filtered boxes"""
+    def calculate_iou(self, box1, box2):
+        """calculate the Intersection over Union (IoU)
+        between two bounding boxes, which measures the
+        extent of overlap between the two boxes in relation
+        to their total area, returning a value indicating
+        the degree of overlap."""
+        x1_overlap = max(box1[0], box2[0])
+        y1_overlap = max(box1[1], box2[1])
+        x2_overlap = min(box1[2], box2[2])
+        y2_overlap = min(box1[3], box2[3])
+
+        if x2_overlap > x1_overlap and y2_overlap > y1_overlap:
+            intersection_area = (x2_overlap - x1_overlap) * (y2_overlap - y1_overlap)
+            box1_area = (box1[2] - box1[0]) * (box1[3] - box1[1])
+            box2_area = (box2[2] - box2[0]) * (box2[3] - box2[1])
+
+            union_area = box1_area + box2_area - intersection_area
+            iou = intersection_area / union_area
+            return iou
+        else:
+            return 0.0
+
+    def non_max_suppression(self, filtered_boxes, box_classes, box_scores):
+        """Applies non-maximum suppression to the filtered boxes."""
         unique_classes = np.unique(box_classes)
         box_predictions = []
         predicted_box_classes = []
         predicted_box_scores = []
 
         for cls in unique_classes:
-            idx = np.where(box_classes == cls)
-            class_boxes = filtered_boxes[idx]
-            class_box_scores = box_scores[idx]
+            cls_indices = np.where(box_classes == cls)[0]
+            cls_boxes = filtered_boxes[cls_indices]
+            cls_box_scores = box_scores[cls_indices]
 
-            while len(class_boxes) > 0:
-                max_score_idx = np.argmax(class_box_scores)
-                box_predictions.append(class_boxes[max_score_idx])
+            while len(cls_boxes) > 0:
+                max_score_idx = np.argmax(cls_box_scores)
+                box_predictions.append(cls_boxes[max_score_idx])
                 predicted_box_classes.append(cls)
-                predicted_box_scores.append(class_box_scores[max_score_idx])
+                predicted_box_scores.append(cls_box_scores[max_score_idx])
 
-                iou = [self.intersection_over_union(class_boxes[max_score_idx],
-                                                    box)for box in class_boxes]
-                to_remove = np.where(np.array(iou) > self.nms_t)
+                iou_scores = [self.intersection_over_union(cls_boxes[max_score_idx], box) for box in cls_boxes]
+                to_remove = np.where(np.array(iou_scores) > self.nms_t)[0]
                 cls_boxes = np.delete(cls_boxes, to_remove, axis=0)
-                cls_box_scores = np.delete(cls_box_scores, to_remove, axis=0)
+                cls_box_scores = np.delete(cls_box_scores, to_remove)
 
         return (np.array(box_predictions),
                 np.array(predicted_box_classes),
                 np.array(predicted_box_scores))
+
