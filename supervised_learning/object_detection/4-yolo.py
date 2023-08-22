@@ -153,16 +153,7 @@ class Yolo:
 
     @staticmethod
     def load_images(folder_path):
-        """Load images from the specified folder path"""
-        images = []
-        image_paths = []
-
-        for filename in os.listdir(folder_path):
-            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
-                image_path = os.path.join(folder_path, filename)
-                image = cv2.imread(image_path)
-                image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB
-                images.append(image_rgb)
-                image_paths.append(image_path)
-
+        """Loads images from a folder and returns a tuple of images and their paths"""
+        image_paths = [os.path.join(folder_path, img) for img in os.listdir(folder_path) if img.lower().endswith(('.jpg', '.jpeg', '.png'))]
+        images = [cv2.imread(image_path) for image_path in image_paths]
         return images, image_paths
