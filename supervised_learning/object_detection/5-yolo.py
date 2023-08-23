@@ -161,7 +161,7 @@ class Yolo:
         images = [cv2.imread(image_path) for image_path in image_paths]
         return images, image_paths
 
-    def process_images(self, images):
+    def preprocess_images(self, images):
         """preprocesses a list of input images by resizing them
         to a desired size while maintaining their aspect ratios,
         normalizing pixel values, and returning the processed images
