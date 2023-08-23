@@ -169,20 +169,12 @@ class Yolo:
         pimages = []
         image_shapes = []
 
-        i = 0  # Initialize loop counter
-        while i < len(images):
-            image = images[i]
-            original_shape = image.shape[:2]
-            image_shapes.append(original_shape)
+        for image in images:
+            image_resized = cv2.resize(image, (self.model.input.shape[1].value, self.model.input.shape[2].value),
+                                       interpolation=cv2.INTER_CUBIC)
+            image_rescaled = image_resized / 255.0
+            pimages.append(image_rescaled)
 
-            resized_image = cv2.resize(image, self.target_shape[:2], interpolation=cv2.INTER_CUBIC)
-            scaled_image = resized_image / 255.0
+            image_shapes.append(image.shape[:2])
 
-            pimages.append(scaled_image)
-            
-            i += 1  # Increment loop counter
-
-        pimages = np.array(pimages)
-        image_shapes = np.array(image_shapes)
-
-        return pimages, image_shapes
+        return np.array(pimages), np.array(image_shapes)
