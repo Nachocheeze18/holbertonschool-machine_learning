@@ -166,19 +166,23 @@ class Yolo:
         to a desired size while maintaining their aspect ratios,
         normalizing pixel values, and returning the processed images
         along with their original shapes."""
-        transformed_images = []
-        image_info = []
+        processed_images = []
+        image_shapes = []
 
-        for img in images:
-            img_info = img.shape[:2]
-            image_info.append(img_info)
+        i = 0  # Initialize loop counter
+        while i < len(images):
+            image = images[i]
+            original_shape = image.shape[:2]
+            image_shapes.append(original_shape)
 
-            resized_img = cv2.resize(img, self.desired_size, interpolation=cv2.INTER_LINEAR)
-            normalized_img = resized_img / 255.0
+            resized_image = cv2.resize(image, self.target_shape[:2], interpolation=cv2.INTER_CUBIC)
+            scaled_image = resized_image / 255.0
 
-            transformed_images.append(normalized_img)
+            processed_images.append(scaled_image)
+            
+            i += 1  # Increment loop counter
 
-        transformed_images = np.array(transformed_images)
-        image_info = np.array(image_info)
+        processed_images = np.array(processed_images)
+        image_shapes = np.array(image_shapes)
 
-        return transformed_images, image_info
+        return processed_images, image_shapes
