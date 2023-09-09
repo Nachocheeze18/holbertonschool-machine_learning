@@ -12,7 +12,7 @@ def determinant(matrix):
     num_rows = len(matrix)
     for row in matrix:
         if len(row) != num_rows:
-            return 1
+            raise ValueError("matrix must be a square matrix")
     
     if num_rows == 0:
         return 1
