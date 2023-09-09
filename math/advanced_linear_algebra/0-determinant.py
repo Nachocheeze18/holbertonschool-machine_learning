@@ -6,7 +6,6 @@ def determinant(matrix):
     """
     Calculate the determinant of a square matrix.
     """
-
     if not isinstance(matrix, list):
         raise TypeError("matrix must be a list of lists")
 
@@ -22,13 +21,15 @@ def determinant(matrix):
     if len(matrix) == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
 
-
     result = 0
-    for j in range(n):
-        sub_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
-        cofactor = matrix[0][j] * determinant(sub_matrix)
-        if cofactor is None:
-            return None
-        result += cofactor if j % 2 == 0 else -cofactor
+    i = 0
+    while i < len(matrix):
+        sub = [[matrix[j][k] for k in range(len(matrix[j])) if k != i] for j in range(1, len(matrix))]
+        cofactor = matrix[0][i] * determinant(sub)
+        if i % 2 == 0:
+            result += cofactor
+        else:
+            result -= cofactor
+        i += 1
 
     return result
