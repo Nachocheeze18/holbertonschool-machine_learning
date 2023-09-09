@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+"""Matrix Determinant Calculator"""
+
+def determinant(matrix):
+    """
+    Calculate the determinant of a square matrix.
+    """
+
+    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
+        raise TypeError("Input must be a list of lists")
+
+    n = len(matrix)
+
+    if n == 0:
+        return 1
+
+    if n == 1:
+        return matrix[0][0]
+
+    if n == 2:
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
+    result = 0
+    for j in range(n):
+        sub_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
+        cofactor = matrix[0][j] * determinant(sub_matrix)
+        result += cofactor if j % 2 == 0 else -cofactor
+
+    return result
