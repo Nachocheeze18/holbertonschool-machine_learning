@@ -6,13 +6,17 @@ def determinant(matrix):
     """
     Calculate the determinant of a square matrix.
     """
-    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
+    if type(matrix) is not list or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
-    
-    num_rows = len(matrix)
-    for row in matrix:
-        if len(row) != num_rows:
+    if len(matrix) == 1 and len(matrix[0]) == 0:
+        return 1
+    for i in range(len(matrix)):
+        if type(matrix[i]) is not list:
+            raise TypeError("matrix must be a list of lists")
+        if len(matrix) != len(matrix[i]):
             raise ValueError("matrix must be a square matrix")
+
+    num_rows = len(matrix)
     
     if num_rows == 0:
         return 1
