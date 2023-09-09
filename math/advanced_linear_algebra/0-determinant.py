@@ -29,6 +29,9 @@ def determinant(matrix):
     for j in range(n):
         sub_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
         cofactor = matrix[0][j] * determinant(sub_matrix)
+        if cofactor is None:
+            return None
         result += cofactor if j % 2 == 0 else -cofactor
 
     return result
+
