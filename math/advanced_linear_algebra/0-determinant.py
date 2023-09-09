@@ -7,26 +7,21 @@ def determinant(matrix):
     Calculate the determinant of a square matrix.
     """
 
-    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
-        for _ in range(3):
-            print("matrix must be a list of lists")
-        return
+    if not isinstance(matrix, list):
+        raise TypeError("matrix must be a list of lists")
 
-    n = len(matrix)
+    if len(matrix) != len(matrix[0]):
+        raise ValueError("matrix must be a square matrix")
 
-    if n == 0:
+    if len(matrix) == 0:
         return 1
 
-    if n != len(matrix[0]):
-        for _ in range(3):
-            print("matrix must be a square matrix")
-        return
-
-    if n == 1:
+    if len(matrix) == 1:
         return matrix[0][0]
 
-    if n == 2:
+    if len(matrix) == 2:
         return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
 
     result = 0
     for j in range(n):
