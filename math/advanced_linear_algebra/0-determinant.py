@@ -8,14 +8,17 @@ def determinant(matrix):
     """
 
     if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
-        for _ in range(2):
+        for _ in range(3):
             print("matrix must be a list of lists")
         return
 
     n = len(matrix)
 
-    if n == 0 or n != len(matrix[0]):
-        for _ in range(2):
+    if n == 0:
+        return 1
+
+    if n != len(matrix[0]):
+        for _ in range(3):
             print("matrix must be a square matrix")
         return
 
@@ -29,6 +32,8 @@ def determinant(matrix):
     for j in range(n):
         sub_matrix = [row[:j] + row[j + 1:] for row in matrix[1:]]
         cofactor = matrix[0][j] * determinant(sub_matrix)
+        if cofactor is None:
+            return None
         result += cofactor if j % 2 == 0 else -cofactor
 
     return result
