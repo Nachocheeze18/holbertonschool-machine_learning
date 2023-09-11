@@ -48,10 +48,7 @@ def determinant(matrix):
 
     det = 0
     for col in range(num_rows):
-        submatrix = [row[:col] + row[col + 1:] for row in matrix[1:]]
-        for row in submatrix:
-            if type(row) is not list:
-                raise TypeError("submatrix must be a list of lists")
+        submatrix = [[matrix[i][j] for j in range(num_rows) if j != col] for i in range(1, num_rows)]
         cofactor = matrix[0][col] * determinant(submatrix)
         if col % 2 == 0:
             det += cofactor
