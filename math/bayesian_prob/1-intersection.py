@@ -29,7 +29,16 @@ def intersection(x, n, P, Pr):
     if not np.isclose(Pr.sum(), 1):
         raise ValueError("Pr must sum to 1")
 
-    likelihood = np.power(P, x) * np.power(1 - P, n - x)
-    intersection = likelihood * Pr
-
-    return intersection
+    fact_n = fact_x = fact_n_minus_x = 1
+    for i in range(1, n + 1):
+        fact_n *= i
+    for i in range(1, x + 1):
+        fact_x *= i
+    for i in range(1, n - x + 1):
+        fact_n_minus_x *= i
+    
+    comb = fact_n / (fact_x * fact_n_minus_x)
+    
+    likelihood = comb * np.power(P, x) * np.power(1 - P, n - x)
+    
+    return likelihood * Pr
