@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """inverse matrix"""
 
+
 def determinant(submatrix):
+    """
+    Calculate the determinant of a square matrix.
+    """
     if len(submatrix) == 1:
         return submatrix[0][0]
     elif len(submatrix) == 2:
@@ -17,7 +21,33 @@ def determinant(submatrix):
         submatrix_minor = [row[:j] + row[j + 1:] for row in submatrix[1:]]
         det += (cofactor_sign * cofactor_value *
                 determinant(submatrix_minor))
-        return det
+    return det
+
+
+def adjugate(matrix):
+    """Calculates the adjugate matrix of a given matrix."""
+    if not isinstance(matrix, list) or not all(isinstance(row, list)
+                                               for row in matrix):
+        raise TypeError("matrix must be a list of lists")
+
+    if not matrix or not matrix[0]:
+        raise ValueError("matrix must be a non-empty square matrix")
+
+    num_rows = len(matrix)
+    if not all(len(row) == num_rows for row in matrix):
+        raise ValueError("matrix must be a non-empty square matrix")
+
+    cofactor_matrix = cofactor(matrix)
+
+    adjugate_matrix = []
+    for i in range(num_rows):
+        adjugate_row = []
+        for j in range(num_rows):
+            adjugate_row.append(cofactor_matrix[j][i])
+        adjugate_matrix.append(adjugate_row)
+
+    return adjugate_matrix
+
 
 def inverse(matrix):
     """Calculates the inverse matrix of a given square matrix."""
@@ -43,6 +73,7 @@ def inverse(matrix):
                        for j in range(num_rows)] for i in range(num_rows)]
 
     return inverse_matrix
+
 
 def cofactor(matrix):
     """calculates the cofactor matrix of a given square matrix."""
@@ -72,28 +103,3 @@ def cofactor(matrix):
         cofactor_matrix.append(cofactor_row)
 
     return cofactor_matrix
-
-
-def adjugate(matrix):
-    """Calculates the adjugate matrix of a given matrix."""
-    if not isinstance(matrix, list) or not all(isinstance(row, list)
-                                               for row in matrix):
-        raise TypeError("matrix must be a list of lists")
-
-    if not matrix or not matrix[0]:
-        raise ValueError("matrix must be a non-empty square matrix")
-
-    num_rows = len(matrix)
-    if not all(len(row) == num_rows for row in matrix):
-        raise ValueError("matrix must be a non-empty square matrix")
-
-    cofactor_matrix = cofactor(matrix)
-
-    adjugate_matrix = []
-    for i in range(num_rows):
-        adjugate_row = []
-        for j in range(num_rows):
-            adjugate_row.append(cofactor_matrix[j][i])
-        adjugate_matrix.append(adjugate_row)
-
-    return adjugate_matrix
