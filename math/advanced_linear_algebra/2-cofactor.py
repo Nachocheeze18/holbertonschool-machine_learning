@@ -4,7 +4,8 @@
 
 def cofactor(matrix):
     """calculates the cofactor matrix of a given square matrix."""
-    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
+    if not isinstance(matrix, list) or not all(isinstance(row, list)
+                                               for row in matrix):
         raise TypeError("matrix must be a list of lists")
 
     if not matrix or not matrix[0]:
@@ -18,14 +19,18 @@ def cofactor(matrix):
         if len(submatrix) == 1:
             return submatrix[0][0]
         elif len(submatrix) == 2:
-            return submatrix[0][0] * submatrix[1][1] - submatrix[0][1] * submatrix[1][0]
+            return (submatrix[0][0] *
+                    submatrix[1][1] -
+                    submatrix[0][1] *
+                    submatrix[1][0])
 
         det = 0
         for j in range(len(submatrix)):
             cofactor_sign = (-1) ** j
             cofactor_value = submatrix[0][j]
             submatrix_minor = [row[:j] + row[j + 1:] for row in submatrix[1:]]
-            det += cofactor_sign * cofactor_value * determinant(submatrix_minor)
+            det += cofactor_sign * cofactor_value * determinant
+            (submatrix_minor)
         return det
 
     if num_rows == 1:
@@ -35,7 +40,8 @@ def cofactor(matrix):
     for i in range(num_rows):
         cofactor_row = []
         for j in range(num_rows):
-            submatrix = [row[:j] + row[j + 1:] for row in (matrix[:i] + matrix[i + 1:])]
+            submatrix = [row[:j] + row[j + 1:] for row in
+                         (matrix[:i] + matrix[i + 1:])]
             cofactor_sign = (-1) ** (i + j)
             cofactor_value = cofactor_sign * determinant(submatrix)
             cofactor_row.append(cofactor_value)
