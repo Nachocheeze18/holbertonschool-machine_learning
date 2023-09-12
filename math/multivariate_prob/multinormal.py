@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """imports"""
-
 import numpy as np
+
 
 class MultiNormal:
     """multinormal class"""
