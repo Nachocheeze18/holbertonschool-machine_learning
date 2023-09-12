@@ -14,10 +14,11 @@ def minor(matrix):
     minor_matrix = []
 
     for i in range(num_rows):
+        det = []
         for j in range(num_rows):
             submatrix = [row[:j] + row[j+1:] for row in (matrix[:i] + matrix[i+1:])]
-            det = determinant(submatrix)
-            minor_matrix[i][j] = det
+            det.append(determinant(submatrix))
+            minor_matrix.append(det)
 
     return minor_matrix
 
