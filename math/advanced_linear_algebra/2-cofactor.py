@@ -17,6 +17,16 @@ def cofactor(matrix):
     def determinant(submatrix):
         if len(submatrix) == 1:
             return submatrix[0][0]
+        elif len(submatrix) == 2:
+            return submatrix[0][0] * submatrix[1][1] - submatrix[0][1] * submatrix[1][0]
+
+        det = 0
+        for j in range(len(submatrix)):
+            cofactor_sign = (-1) ** j
+            cofactor_value = submatrix[0][j]
+            submatrix_minor = [row[:j] + row[j + 1:] for row in submatrix[1:]]
+            det += cofactor_sign * cofactor_value * determinant(submatrix_minor)
+        return det
 
     if num_rows == 1:
         return [[1]]
