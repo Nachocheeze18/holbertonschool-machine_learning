@@ -10,7 +10,6 @@ def cofactor(matrix):
     if not matrix or not matrix[0]:
         raise ValueError("matrix must be a non-empty square matrix")
 
-
     num_rows = len(matrix)
     if not all(len(row) == num_rows for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
