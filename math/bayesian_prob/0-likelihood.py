@@ -8,7 +8,8 @@ def likelihood(x, n, P):
     if type(n) != int or n <= 0:
         raise ValueError('n must be a positive integer')
     if type(x) != int or x < 0:
-        raise ValueError('x must be an integer that is greater than or equal to 0')
+        raise ValueError
+    ('x must be an integer that is greater than or equal to 0')
     if x > n:
         raise ValueError('x cannot be greater than n')
     if not isinstance(P, np.ndarray) or P.shape != (len(P),):
