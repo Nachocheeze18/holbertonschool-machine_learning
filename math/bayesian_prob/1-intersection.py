@@ -5,11 +5,12 @@ import numpy as np
 
 def intersection(x, n, P, Pr):
     """calculates the intersection of obtaining certain data"""
+    value = 'x must be an integer that is greater than or equal to 0'
     if not isinstance(n, int) or n <= 0:
         raise ValueError("n must be a positive integer")
 
     if not isinstance(x, int) or x < 0:
-        raise ValueError("x must be an integer that is greater than or equal to 0")
+        raise ValueError(value)
 
     if x > n:
         raise ValueError("x cannot be greater than n")
@@ -36,9 +37,9 @@ def intersection(x, n, P, Pr):
         fact_x *= i
     for i in range(1, n - x + 1):
         fact_n_minus_x *= i
-    
+
     comb = fact_n / (fact_x * fact_n_minus_x)
-    
+
     likelihood = comb * np.power(P, x) * np.power(1 - P, n - x)
-    
+
     return likelihood * Pr
