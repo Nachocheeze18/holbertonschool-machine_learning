@@ -15,17 +15,17 @@ def cofactor(matrix):
     if not all(len(row) == num_rows for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
-    def determinant(matrix):
-        if len(matrix) == 1:
-            return matrix[0][0]
-        elif len(matrix) == 2:
-            return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+    def determinant(smatrix):
+        if len(smatrix) == 1:
+            return smatrix[0][0]
+        elif len(smatrix) == 2:
+            return smatrix[0][0] * smatrix[1][1] - smatrix[0][1] * matrix[1][0]
 
         det = 0
-        for j in range(len(matrix)):
+        for j in range(len(smatrix)):
             cofactor_sign = (-1) ** j
-            cofactor_value = matrix[0][j]
-            submatrix_minor = [row[:j] + row[j + 1:] for row in matrix[1:]]
+            cofactor_value = smatrix[0][j]
+            submatrix_minor = [row[:j] + row[j + 1:] for row in smatrix[1:]]
             det += cofactor_sign * cofactor_value * determinant
             (submatrix_minor)
         return det
