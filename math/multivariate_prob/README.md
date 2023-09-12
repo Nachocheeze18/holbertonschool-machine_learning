@@ -1,0 +1,17 @@
+Carl Friedrich Gauss:
+Carl Friedrich Gauss (1777-1855) was a German mathematician, physicist, and astronomer who made significant contributions to various fields of science and mathematics. He is often referred to as the "Prince of Mathematicians" and is considered one of the most influential mathematicians in history. Gauss made significant contributions to number theory, algebra, statistics, differential geometry, and many other areas of mathematics. He is known for the Gaussian distribution (also called the normal distribution), which plays a fundamental role in statistics and probability theory. Gauss's work laid the foundation for many areas of modern mathematics and science.
+
+Joint/Multivariate Distribution:
+A joint or multivariate distribution is a probability distribution that describes the simultaneous behavior of two or more random variables. In other words, it provides the probabilities associated with multiple random variables taking specific values or ranges of values at the same time. Joint distributions are commonly used in statistics and probability theory to model complex relationships between multiple variables.
+
+Covariance:
+Covariance is a statistical measure that quantifies the degree to which two random variables change together. It indicates whether an increase in one variable corresponds to an increase or decrease in another variable. A positive covariance suggests that the two variables tend to increase or decrease together, while a negative covariance suggests that one variable tends to increase when the other decreases. Covariance is often used to understand the linear relationship between two variables.
+
+Correlation Coefficient:
+The correlation coefficient is a standardized measure of the strength and direction of the linear relationship between two random variables. It is a value that ranges from -1 to 1. A correlation coefficient of 1 indicates a perfect positive linear relationship, -1 indicates a perfect negative linear relationship, and 0 indicates no linear relationship. The most commonly used correlation coefficient is the Pearson correlation coefficient.
+
+Covariance Matrix:
+A covariance matrix is a square matrix that provides a comprehensive summary of the covariances between multiple pairs of random variables. Each element of the matrix represents the covariance between two specific variables, and the diagonal elements represent the variances of individual variables. Covariance matrices are used in multivariate statistics to capture the relationships and dependencies between multiple variables simultaneously.
+
+Multivariate Gaussian Distribution:
+A multivariate Gaussian distribution, also known as a multivariate normal distribution, is a probability distribution that extends the concept of the one-dimensional Gaussian (normal) distribution to multiple dimensions. It describes the joint probability distribution of multiple random variables, where each variable can have its mean and variance and can be correlated with others. The multivariate Gaussian distribution is characterized by a mean vector and a covariance matrix, which specify the location and shape of the distribution in multiple dimensions. It is widely used in statistics, machine learning, and various fields to model data with complex dependencies among multiple variables.
