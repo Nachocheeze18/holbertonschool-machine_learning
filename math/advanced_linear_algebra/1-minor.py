@@ -11,7 +11,7 @@ def minor(matrix):
     if num_rows == 0 or any(len(row) != num_rows for row in matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
-    minor_matrix = [[0 for _ in range(num_rows)] for _ in range(num_rows)]
+    minor_matrix = []
 
     for i in range(num_rows):
         for j in range(num_rows):
