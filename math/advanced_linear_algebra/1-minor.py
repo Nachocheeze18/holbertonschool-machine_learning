@@ -26,14 +26,14 @@ def determinant(matrix):
     """
     Calculate the determinant of a square matrix.
     """
-    if not isinstance(matrix, list) or len(matrix) == 0:
+    if type(matrix) is not list or len(matrix) == 0:
         raise TypeError("matrix must be a list of lists")
     if len(matrix) == 1 and len(matrix[0]) == 0:
         return 1
-    for row in matrix:
-        if not isinstance(row, list):
+    for i in range(len(matrix)):
+        if type(matrix[i]) is not list:
             raise TypeError("matrix must be a list of lists")
-        if len(matrix) != len(row):
+        if len(matrix) != len(matrix[i]):
             raise ValueError("matrix must be a square matrix")
 
     num_rows = len(matrix)
@@ -49,7 +49,7 @@ def determinant(matrix):
 
     det = 0
     for col in range(num_rows):
-        submatrix = [[matrix[i][j] for j in range(num_rows) if j != col] for i in range(1, num_rows)]
+        submatrix = [row[:col] + row[col + 1:] for row in matrix[1:]]
         cofactor = matrix[0][col] * determinant(submatrix)
         if col % 2 == 0:
             det += cofactor
