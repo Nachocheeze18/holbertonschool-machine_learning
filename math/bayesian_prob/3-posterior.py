@@ -4,7 +4,8 @@ import numpy as np
 
 
 def posterior(x, n, P, Pr):
-    """calculates the marginal probability of obtaining the data"""
+    """calculates the posterior probability for the various hypothetical
+    probabilities of developing severe side effects given the data:"""
     value = 'x must be an integer that is greater than or equal to 0'
     if not isinstance(n, int) or n <= 0:
         raise ValueError("n must be a positive integer")
