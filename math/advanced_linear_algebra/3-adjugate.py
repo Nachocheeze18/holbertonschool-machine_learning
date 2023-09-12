@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""cofactor matrix"""
+"""adjugate matrix"""
 
 
 def cofactor(matrix):
@@ -49,9 +49,11 @@ def cofactor(matrix):
 
     return cofactor_matrix
 
+
 def adjugate(matrix):
     """Calculates the adjugate matrix of a given matrix."""
-    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
+    if not isinstance(matrix, list) or not all(isinstance(row, list)
+                                               for row in matrix):
         raise TypeError("matrix must be a list of lists")
 
     if not matrix or not matrix[0]:
@@ -67,7 +69,7 @@ def adjugate(matrix):
     for i in range(num_rows):
         adjugate_row = []
         for j in range(num_rows):
-            adjugate_row.append(cofactor_matrix[j][i])  # Swap rows and columns
+            adjugate_row.append(cofactor_matrix[j][i])
         adjugate_matrix.append(adjugate_row)
 
     return adjugate_matrix
