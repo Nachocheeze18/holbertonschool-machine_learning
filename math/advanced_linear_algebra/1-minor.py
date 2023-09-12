@@ -2,39 +2,12 @@
 """Minor Matrix"""
 
 
-def minor(matrix):
-    """calculates the minor matrix of a matrix"""
-    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
-        raise TypeError("matrix must be a list of lists")
-
-    num_rows = len(matrix)
-    if num_rows == 0 or any(len(row) != num_rows for row in matrix):
-        raise ValueError("matrix must be a non-empty square matrix")
-
-    minor_matrix = []
-
-    for i in range(num_rows):
-        det = []
-        for j in range(num_rows):
-            submatrix = [row[:j] + row[j+1:] for row in (matrix[:i] + matrix[i+1:])]
-            det.append(determinant(submatrix))
-            minor_matrix.append(det)
-
-    return minor_matrix
-
 def determinant(matrix):
     """
     Calculate the determinant of a square matrix.
     """
-    if type(matrix) is not list or len(matrix) == 0:
+    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
         raise TypeError("matrix must be a list of lists")
-    if len(matrix) == 1 and len(matrix[0]) == 0:
-        return 1
-    for i in range(len(matrix)):
-        if type(matrix[i]) is not list:
-            raise TypeError("matrix must be a list of lists")
-        if len(matrix) != len(matrix[i]):
-            raise ValueError("matrix must be a square matrix")
 
     num_rows = len(matrix)
 
@@ -57,3 +30,24 @@ def determinant(matrix):
             det -= cofactor
 
     return det
+
+
+def minor(matrix):
+    """calculates the minor matrix of a matrix"""
+    if not isinstance(matrix, list) or not all(isinstance(row, list) for row in matrix):
+        raise TypeError("matrix must be a list of lists")
+
+    num_rows = len(matrix)
+    if num_rows == 0 or any(len(row) != num_rows for row in matrix):
+        raise ValueError("matrix must be a non-empty square matrix")
+
+    minor_matrix = []
+
+    for i in range(num_rows):
+        det = []
+        for j in range(num_rows):
+            submatrix = [row[:j] + row[j + 1:] for row in (matrix[:i] + matrix[i + 1:])]
+            det.append(determinant(submatrix))
+        minor_matrix.append(det)
+
+    return minor_matrix
