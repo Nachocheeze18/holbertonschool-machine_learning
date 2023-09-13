@@ -9,7 +9,7 @@ class MultiNormal:
         """Class constructor"""
         if not isinstance(data, np.ndarray) or data.ndim != 2:
             raise TypeError("data must be a 2D numpy.ndarray")
-            
+        
         n, d = data.shape
         if n < 2:
             raise ValueError("data must contain multiple data points")
@@ -17,7 +17,7 @@ class MultiNormal:
         self.mean = np.mean(data, axis=1).reshape(-1, 1)
 
         mean_centered_data = data - self.mean
-        self.cov = (mean_centered_data @ mean_centered_data.T) / (n - 1)
+        self.cov = (mean_centered_data @ mean_centered_data.T) / (n)
 
     def pdf(self, x):
         """calculates the Probability Density Function"""
