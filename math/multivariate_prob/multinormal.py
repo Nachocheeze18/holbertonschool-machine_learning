@@ -14,10 +14,12 @@ class MultiNormal:
         if n < 2:
             raise ValueError("data must contain multiple data points")
 
+        # Calculate the mean of the data
         self.mean = np.mean(data, axis=1).reshape(-1, 1)
 
+        # Calculate the covariance matrix using the unbiased formula
         mean_centered_data = data - self.mean
-        self.cov = (1 / n) * (mean_centered_data @ mean_centered_data.T)
+        self.cov = (1 / (n - 1)) * (mean_centered_data @ mean_centered_data.T)
 
     def pdf(self, x):
         """calculates the Probability Density Function"""
