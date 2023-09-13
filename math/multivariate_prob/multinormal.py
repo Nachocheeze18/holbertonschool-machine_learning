@@ -6,21 +6,23 @@ import numpy as np
 class MultiNormal:
     """Multivariate Normal distribution class"""
 
-    def __init__(self, data):
-        """Class constructor"""
-        if not isinstance(data, np.ndarray) or data.ndim != 2:
-            raise TypeError("data must be a 2D numpy.ndarray")
-        
-        n, d = data.shape
-        if n < 2:
-            raise ValueError("data must contain multiple data points")
+    class MultiNormal:
+        """Multivariate Normal distribution class"""
+        def __init__(self, data):
+            """Class constructor"""
+            if not isinstance(data, np.ndarray) or data.ndim != 2:
+                raise TypeError("data must be a 2D numpy.ndarray")
+            
+            n, d = data.shape
+            if n < 2:
+                raise ValueError("data must contain multiple data points")
 
-        # Calculate the mean of the data
-        self.mean = np.mean(data, axis=1).reshape(-1, 1)
+            # Calculate the mean of the data
+            self.mean = np.mean(data, axis=1).reshape(-1, 1)
 
-        # Calculate the covariance matrix
-        mean_centered_data = data - self.mean
-        self.cov = (mean_centered_data @ mean_centered_data.T) / (n - 1)
+            # Calculate the covariance matrix
+            mean_centered_data = data - self.mean
+            self.cov = (mean_centered_data @ mean_centered_data.T) / (n - 1)
 
     def pdf(self, x):
         """calculates the Probability Density Function"""
