@@ -17,7 +17,7 @@ class MultiNormal:
         self.mean = np.mean(data, axis=1).reshape(-1, 1)
 
         mean_centered_data = data - self.mean
-        self.cov = (mean_centered_data @ mean_centered_data.T) / (n)
+        self.cov = (1 / n) * (mean_centered_data @ mean_centered_data.T)
 
     def pdf(self, x):
         """calculates the Probability Density Function"""
