@@ -28,7 +28,8 @@ class MultiNormal:
 
         d = self.mean.shape[0]
 
-        exponent = -0.5 * ((x - self.mean).T @ np.linalg.inv(self.cov) @ (x - self.mean))
+        mean_diff = x - self.mean
+        exponent = -0.5 * (mean_diff.T @ np.linalg.inv(self.cov) @ mean_diff)[0, 0]
         denominator = (2 * np.pi) ** (-d / 2) * np.sqrt(np.linalg.det(self.cov))
         value = np.exp(exponent) / denominator
         return value
