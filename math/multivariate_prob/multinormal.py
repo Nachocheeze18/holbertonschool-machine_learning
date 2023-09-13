@@ -11,6 +11,9 @@ class MultiNormal:
             raise TypeError("data must be a 2D numpy.ndarray")
 
         n, d = data.shape
+        if d != 1:
+            raise ValueError("data must be univariate (1-dimensional)")
+
         if n < 2:
             raise ValueError("data must contain multiple data points")
 
@@ -19,13 +22,13 @@ class MultiNormal:
 
     def pdf(self, x):
         """calculates the Probability Density Function"""
-        if not isinstance(x, np.ndarray):
-            raise TypeError("x must be a numpy.ndarray")
+        if not isinstance(x, np.ndarray) or x.ndim != 2:
+            raise TypeError("x must be a 2D numpy.ndarray")
 
         n, d = x.shape  # Get the number of data points and dimensionality
 
         if d != 1:
-            raise ValueError("Each data point in x must have dimensionality 1")
+            raise ValueError("x must be univariate (1-dimensional)")
 
         exponent = -0.5 * ((x - self.mean) ** 2) / self.variance
         denominator = np.sqrt(2 * np.pi * self.variance)
