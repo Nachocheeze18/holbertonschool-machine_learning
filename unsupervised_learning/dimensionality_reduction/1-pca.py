@@ -14,4 +14,9 @@ def pca(X, ndim):
     vectors = vectors[:, sorted_indices]
     top_vectors = vectors[:, :ndim]
     T = np.dot(centered_data, top_vectors)
+
+    for i in range(ndim):
+        if np.sum(T[:, i]) < 0:
+            T[:, i] *= -1
+
     return T
