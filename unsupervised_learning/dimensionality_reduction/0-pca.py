@@ -9,11 +9,11 @@ def pca(X, var=0.95):
 
     U, S, Vt = np.linalg.svd(cov_matrix)
 
-    variance = np.sum(S)
+    total_variance = np.sum(S)
 
-    cumulative_variance = np.cumsum(S) / variance
-    num = np.argmax(cumulative_variance >= var) + 1
+    cumulative_variance = np.cumsum(S) / total_variance
+    num_dimensions_to_keep = np.argmax(cumulative_variance >= var) + 1
 
-    W = Vt[:num, :].T
+    W = Vt[:num_dimensions_to_keep, :].T
 
     return W
