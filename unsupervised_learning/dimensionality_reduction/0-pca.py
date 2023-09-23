@@ -4,20 +4,16 @@ import numpy as np
 
 
 def pca(X, var=0.95):
-    """Calculate the covariance matrix of the input data"""
+    """Perform PCA on a dataset."""
     cov_matrix = np.cov(X, rowvar=False)
 
-    values, vectors = np.linalg.eigh(cov_matrix)
+    U, S, Vt = np.linalg.svd(cov_matrix)
 
-    indices = np.argsort(values)[::-1]
-    values = values[indices]
-    vectors = vectors[:, indices]
+    variance = np.sum(S)
 
-    variance_ratio = np.cumsum(values) / np.sum(values)
+    cumulative_variance = np.cumsum(S) / variance
+    num = np.argmax(cumulative_variance >= var) + 1
 
-    num = 3
-
-    W = vectors[:, :num]
-
+    W = Vt[:num, :].T
 
     return W
