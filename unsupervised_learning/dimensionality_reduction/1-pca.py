@@ -5,8 +5,8 @@ import numpy as np
 
 def pca(X, ndim):
     """Perform PCA on a dataset with a specified number of dimensions."""
-    _, S, Vt = np.linalg.svd(X, full_matrices=False)
+    mean = X - np.mean(X, axis=0)
+    _, _, Vt = np.linalg.svd(mean, full_matrices=False)
     W = Vt[:ndim].T
-    T = X.dot(W)
-    T = np.round(T, decimals=4)
+    T = np.dot(mean, W)
     return T
