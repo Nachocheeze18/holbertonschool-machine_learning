@@ -8,4 +8,5 @@ def pca(X, ndim):
     _, S, Vt = np.linalg.svd(X, full_matrices=False)
     W = Vt[:ndim].T
     T = X.dot(W)
+    T = np.round(T, decimals=4)
     return T
