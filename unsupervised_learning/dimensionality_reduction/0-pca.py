@@ -15,9 +15,9 @@ def pca(X, var=0.95):
 
     variance_ratio = np.cumsum(values) / np.sum(values)
 
-    num = 3  # Compute the first three principal components
+    num = 3
 
     W = vectors[:, :num]
-    eigenvalues = values[:num]
-    
-    return W, eigenvalues
+
+
+    return W
