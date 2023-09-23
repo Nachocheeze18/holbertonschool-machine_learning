@@ -9,5 +9,5 @@ def pca(X, var=0.95):
     total_variance = S**2 / np.sum(S**2)
     cumulative_variance = np.cumsum(total_variance)
     num_dimensions = np.argmax(cumulative_variance >= var) + 1
-    W = Vt[:num_dimensions].T
+    W = Vt[:num_dimensions + 1].T
     return W
