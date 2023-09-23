@@ -12,6 +12,7 @@ def pca(X, ndim):
     sorted_indices = np.argsort(values)[::-1]
     values = values[sorted_indices]
     vectors = vectors[:, sorted_indices]
+    ndim = min(ndim, vectors.shape[1])
     top_vectors = vectors[:, :ndim]
     T = np.dot(centered_data, top_vectors)
 
