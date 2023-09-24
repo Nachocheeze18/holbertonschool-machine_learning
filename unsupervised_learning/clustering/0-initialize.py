@@ -5,12 +5,19 @@ import numpy as np
 
 def initialize(X, k):
     """initializes cluster centroids for K-means"""
-    if k <= 0 or k > X.shape[0]:
+    if not isinstance(X, np.ndarray) or X.ndim != 2:
+        return None
+    if not isinstance(k, int) or k <= 0 or X.shape[0] < k:
         return None
 
-    min_values = np.min(X, axis=0)
-    max_values = np.max(X, axis=0)
+    n, d = X.shape
+    cen = np.zeros((k, d))
 
-    centroids = np.random.uniform(min_values, max_values, size=(k, X.shape[1]))
+    cen[0] = X[np.random.choice(n, 1)]
 
-    return centroids
+    for i in range(1, k):
+        dist = np.array([min(np.linalg.norm(x - c) ** 2 for c in cen[:i]) for x in X])
+        prob = dist / dist.sum()
+        cen[i] = X[np.random.choice(n, 1, p=prob)]
+
+    return cen
