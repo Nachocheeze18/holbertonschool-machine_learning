@@ -18,7 +18,6 @@ def optimum_k(X, kmin=1, kmax=None, iterations=1000):
     if type(iterations) is not int or iterations < 1:
         return None, None
 
-
     results = []
     vars = []
     d_vars = []
