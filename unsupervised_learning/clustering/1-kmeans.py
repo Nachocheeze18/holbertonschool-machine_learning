@@ -20,6 +20,7 @@ def initialize(X, k):
     except Exception:
         return None
 
+
 def kmeans(X, k, iterations=1000):
     """Performs K-means on a dataset."""
     cen = initialize(X, k)
@@ -45,9 +46,10 @@ def kmeans(X, k, iterations=1000):
                 cen[i] = np.mean(cluster_points, axis=0)
             else:
                 cen[i] = initialize(X, 1)
-        
-        labels = np.argmin(np.linalg.norm(X[:, np.newaxis] - cen, axis=2), axis=1)
-        
+
+        labels = np.argmin(np.linalg.norm(X[:, np.newaxis] - cen, axis=2),
+                           axis=1)
+
         if np.array_equal(old_cen, cen):
             break
 
