@@ -29,7 +29,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
         if abs(likelihood_f - likelihood_s) <= tol:
             if verbose:
                 likelihood_r = round(likelihood_f, 5)
-                print("Log Likelihood after {} iterations: {:.5f}".format(i, likelihood_r))
+                print("Log Likelihood after {} iterations: {:.5f}".format(
+                    i, likelihood_r))
             return pi, m, S, g, likelihood_f
 
         if i < iterations:
@@ -37,7 +38,8 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
 
         if verbose and i % 10 == 0:
             likelihood_r = round(likelihood_f, 5)
-            print("Log Likelihood after {} iterations: {:.5f}".format(i, likelihood_r))
+            print("Log Likelihood after {} iterations: {:.5f}".format(
+                i, likelihood_r))
 
         likelihood_s = likelihood_f
 
