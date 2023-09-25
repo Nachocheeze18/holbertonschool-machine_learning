@@ -27,7 +27,7 @@ def maximization(X, g):
     for i in range(k):
         weighted_data = g[i].reshape(-1, 1) * X
         m[i] = np.sum(weighted_data, axis=0) / np.sum(g[i])
-        
+
         diff = X - m[i]
         S[i] = np.dot(g[i].reshape(1, -1) * diff.T, diff) / np.sum(g[i])
 
