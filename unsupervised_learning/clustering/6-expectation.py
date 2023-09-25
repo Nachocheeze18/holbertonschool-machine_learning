@@ -28,6 +28,7 @@ def expectation(X, pi, m, S):
 
     g = np.zeros((k, n))
 
+    P = np.zeros((k, n))
     for i in range(k):
         P = pi[i] * pdf(X, m[i], S[i])
         g[i] = P
