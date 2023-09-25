@@ -23,7 +23,7 @@ def expectation(X, pi, m, S):
     if False in [np.isclose(pi.sum(), 1)]:
         return None, None
 
-    n = X.shape
+    n, d = X.shape
     k = pi.shape[0]
 
     g = np.zeros((k, n))
