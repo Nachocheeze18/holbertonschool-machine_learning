@@ -5,8 +5,6 @@ expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
-    """ finds the best number of clusters for a GMM using
-    the Bayesian Information Criterion"""
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         return None, None, None, None
     if not isinstance(kmin, int) or kmin <= 0:
@@ -47,4 +45,4 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
             best_k = k
             best_result = result
 
-    return (best_k, *best_result, np.array(likelihoods), np.array(bic_values))
+    return best_k, best_result, np.array(likelihoods), np.array(bic_values)
