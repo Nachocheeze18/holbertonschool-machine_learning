@@ -37,7 +37,7 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
         pi, m, S, _, likelihood = result
         likelihoods.append(likelihood)
 
-        num_params = k - 1 + k * d + k * d * (d + 1) // 2
+        num_params = k + k * d + k * d * (d + 1) // 2 
 
         bic = num_params * np.log(n) - 2 * likelihood
         bic_values.append(bic)
@@ -47,4 +47,4 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
             best_k = k
             best_result = result
 
-    return best_k, best_result, np.array(likelihoods), np.array(bic_values)
+    return (best_k, *best_result, np.array(likelihoods), np.array(bic_values))
