@@ -8,11 +8,11 @@ def gmm(X, k):
 
     gmm_model.fit(X)
 
-    weights, means, covariances = gmm_model.weights_,
-    gmm_model.means_, gmm_model.covariances_
-    
-    labels = gmm_model.predict(X)
+    weight = gmm_model.weights_
+    mean = gmm_model.means_
+    cov = gmm_model.covariances_
+    label = gmm_model.predict(X)
 
     bic = gmm_model.bic(X)
 
-    return weights, means, covariances, labels, bic
+    return weight, mean, cov, label, bic
