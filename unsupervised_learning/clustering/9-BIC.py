@@ -5,48 +5,46 @@ expectation_maximization = __import__('8-EM').expectation_maximization
 
 
 def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
-    if not isinstance(X, np.ndarray) or X.ndim != 2:
+    """Finds the best number of clusters for a GMM using the Bayesian
+    Information Criterion."""
+    if type(X) is not np.ndarray or len(X.shape) != 2:
         return None, None, None, None
-    if not isinstance(kmin, int) or kmin <= 0:
+    if type(kmin) is not int or kmin <= 0:
         return None, None, None, None
-    if kmax is not None:
-        if not isinstance(kmax, int) or kmax <= 0 or kmin >= kmax:
-            return None, None, None, None
-    if not isinstance(iterations, int) or iterations <= 0:
+    if kmax is not None and (type(kmax) is not int or kmax <= 0):
         return None, None, None, None
-    if not isinstance(tol, (float, int)) or tol < 0:
+    if kmax is None:
+        kmax = X.shape[0]
+    if kmin >= kmax:
         return None, None, None, None
-    if not isinstance(verbose, bool):
+    if type(iterations) is not int or iterations <= 0:
+        return None, None, None, None
+    if type(tol) is not float or tol < 0:
+        return None, None, None, None
+    if type(verbose) is not bool:
         return None, None, None, None
 
     n, d = X.shape
-    best_bic = float('-inf')
-    best_k = None
-    best_result = None
+    values = []
     likelihoods = []
-    bic_values = []
-
-    # Handle the case where kmax is None
-    if kmax is None:
-        kmax = n  # Set kmax to the number of data points
+    results = []
+    cluster_counts = []
 
     for k in range(kmin, kmax + 1):
-        result = expectation_maximization(X, k, iterations, tol, verbose)
+        pi, m, S, _, likelihood = expectation_maximization(
+            X, k, iterations, tol, verbose)
 
-        if result is None:
-            return None, None, None, None
-
-        pi, m, S, _, likelihood = result
+        results.append((pi, m, S))
+        cluster_counts.append(k)
         likelihoods.append(likelihood)
 
-        num_params = k + k * d + k * d * (d + 1) // 2 
+        p = k * d * (d + 1) / 2 + d * k + k - 1
+        bic = p * np.log(n) - 2 * likelihood
+        values.append(bic)
 
-        bic = num_params * np.log(n) - 2 * likelihood
-        bic_values.append(bic)
+    values = np.array(values)
 
-        if bic > best_bic:
-            best_bic = bic
-            best_k = k
-            best_result = result
+    best_index = np.argmin(values)
 
-    return best_k, best_result, np.array(likelihoods), np.array(bic_values)
+    return (cluster_counts[best_index], results[best_index],
+            likelihoods, values)
