@@ -2,6 +2,7 @@
 """Imports"""
 import sklearn.mixture
 
+
 def gmm(X, k):
     """calculates a GMM from a dataset"""
     gmm_model = sklearn.mixture.GaussianMixture(n_components=k)
