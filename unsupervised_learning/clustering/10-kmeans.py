@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Imports"""
-import numpy as np
-from sklearn.cluster import KMeans
+import sklearn.cluster 
+
 
 def kmeans(X, k):
     """performs K-means on a dataset"""
     n, d = X.shape
 
-    kmeans = KMeans(n_clusters=k)
+    kmeans = sklearn.cluster(n_clusters=k)
 
     kmeans.fit(X)
 
