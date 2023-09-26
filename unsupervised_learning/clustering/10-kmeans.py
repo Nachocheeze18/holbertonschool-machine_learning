@@ -7,8 +7,7 @@ def kmeans(X, k):
     """performs K-means on a dataset"""
     n, d = X.shape
 
-    kmeans = sklearn.cluster.KMeans(n_clusters=k)  # Corrected the instantiation of KMeans
-
+    kmeans = sklearn.cluster.KMeans(n_clusters=k)
     kmeans.fit(X)
 
     C = kmeans.cluster_centers_
