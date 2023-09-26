@@ -26,6 +26,10 @@ def BIC(X, kmin=1, kmax=None, iterations=1000, tol=1e-5, verbose=False):
     likelihoods = []
     bic_values = []
 
+    # Handle the case where kmax is None
+    if kmax is None:
+        kmax = n  # Set kmax to the number of data points
+
     for k in range(kmin, kmax + 1):
         result = expectation_maximization(X, k, iterations, tol, verbose)
 
