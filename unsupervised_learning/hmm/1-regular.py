@@ -8,23 +8,22 @@ def regular(P):
     of a regular Markov chain."""
     n, m = P.shape
 
+    # Check if P is a square matrix
     if n != m:
         return None
 
+    # Check if P is a regular matrix (all rows sum to 1)
     if not np.allclose(np.sum(P, axis=1), 1.0):
         return None
 
-    Q = P[:-1, :-1]
-
-    R = P[:-1, -1]
-
-    I = np.identity(n-1)
-    F = np.ones((n-1,))
+    # Compute the steady state probabilities
+    A = np.transpose(P) - np.identity(n)
+    A[-1, :] = 1
+    b = np.zeros(n)
+    b[-1] = 1
 
     try:
-        inv = np.linalg.inv(I - Q)
-        pi = np.dot(inv, F)
-        steady_state = np.append(pi, 1 - np.sum(pi))
-        return steady_state
+        pi = np.linalg.solve(A, b)
+        return pi
     except np.linalg.LinAlgError:
         return None
