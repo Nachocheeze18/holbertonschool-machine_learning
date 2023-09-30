@@ -14,6 +14,19 @@ def regular(P):
     if not np.allclose(np.sum(P, axis=1), 1.0):
         return None
 
+    visited = set()
+    stack = [0]
+
+    while stack:
+        state = stack.pop()
+        visited.add(state)
+        for next_state in range(n):
+            if P[state, next_state] > 0 and next_state not in visited:
+                stack.append(next_state)
+
+    if len(visited) != n:
+        return None
+
     A = np.transpose(P) - np.identity(n)
     A[-1, :] = 1
     b = np.zeros(n)
