@@ -3,25 +3,28 @@
 import numpy as np
 
 
-def regular(P, tol=1e-8, max_iter=1000):
+def regular(P):
     """Determine the steady-state probabilities
     of a regular Markov chain."""
+    n, m = P.shape
 
-    if not isinstance(P, np.ndarray) or P.shape[0] != P.shape[1]:
+    if n != m:
         return None
 
-    n = P.shape[0]
+    if not np.allclose(np.sum(P, axis=1), 1.0):
+        return None
 
-    pi = np.random.rand(1, n)
-    pi /= np.sum(pi)
+    Q = P[:-1, :-1]
 
-    for _ in range(max_iter):
+    R = P[:-1, -1]
 
-        results = np.dot(pi, P)
+    I = np.identity(n-1)
+    F = np.ones((n-1,))
 
-        if np.linalg.norm(results - pi) < tol:
-            return results
-
-        pi = results
-
-    return None
+    try:
+        inv = np.linalg.inv(I - Q)
+        pi = np.dot(inv, F)
+        steady_state = np.append(pi, 1 - np.sum(pi))
+        return steady_state
+    except np.linalg.LinAlgError:
+        return None
