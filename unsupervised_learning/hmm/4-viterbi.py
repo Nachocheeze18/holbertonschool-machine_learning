@@ -2,6 +2,7 @@
 """Imports"""
 import numpy as np
 
+
 def viterbi(Observation, Emission, Transition, Initial):
     """ calculates the most likely sequence of hidden
     states for a hidden markov model"""
@@ -21,8 +22,9 @@ def viterbi(Observation, Emission, Transition, Initial):
 
     for t in range(1, T):
         for s in range(N):
-            probabilities = V[:, t-1] + np.log(Transition[:, s] + epsilon) + np.log(
-                Emission[s, Observation[t]] + epsilon)
+            probabilities = V[:, t-1] + np.log(
+                Transition[:, s] + epsilon) + np.log(
+                    Emission[s, Observation[t]] + epsilon)
 
             max_prob_index = np.argmax(probabilities)
 
