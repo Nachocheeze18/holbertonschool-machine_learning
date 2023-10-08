@@ -2,6 +2,7 @@
 """Imports"""
 import numpy as np
 
+
 class GaussianProcess:
     """Guassian process class"""
     def __init__(self, X_init, Y_init, l=1, sigma_f=1):
