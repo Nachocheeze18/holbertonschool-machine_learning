@@ -14,14 +14,7 @@ class GaussianProcess:
         self.K = self.kernel(X_init, X_init)
 
     def kernel(self, X1, X2):
-        """represents a noiseless 1D Gaussian process"""
-        m, n = X1.shape[0], X2.shape[0]
-        K = np.zeros((m, n))
-
-        for i in range(m):
-            for j in range(n):
-                dist = np.linalg.norm(X1[i] - X2[j])
-                K[i, j] = self.sigma_f**2 * np.exp(
-                    -0.5 * (dist / self.l)**2)
-
+        """Represents a noiseless 1D Gaussian process"""
+        dist_matrix = np.linalg.norm(X1[:, np.newaxis] - X2, axis=2)
+        K = self.sigma_f**2 * np.exp(-0.5 * (dist_matrix / self.l)**2)
         return K
