@@ -31,6 +31,7 @@ class BayesianOptimization:
             Z = imp / sigma
             ei = imp * norm.cdf(Z) + sigma * norm.pdf(Z)
             ei[sigma == 0.0] = 0.0
-            
-        optimize = self.X_s[np.argmax(ei)] if self.minimize else self.X_s[np.argmin(ei)]
+
+        optimize = self.X_s[np.argmax(ei)] if self.minimize else self.X_s[
+            np.argmin(ei)]
         return optimize, ei
