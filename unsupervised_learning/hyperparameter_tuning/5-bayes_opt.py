@@ -38,6 +38,7 @@ class BayesianOptimization:
         return op, ei
 
     def optimize(self, iterations=100):
+        """optimizes the black-box function"""
         for _ in range(iterations):
             x_next, _ = self.acquisition()
 
