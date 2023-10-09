@@ -46,19 +46,18 @@ class BayesianOptimization:
         for _ in range(iterations):
             X_next, _ = self.acquisition()
 
-            # Check if the proposed point has already been sampled
-            if any(np.all(np.isclose(X_next, x)) for x in self.X):
+            if X_next in self.gp.X:
                 break
 
             Y_next = self.f(X_next)
 
-            self.X = np.vstack((self.X, X_next))
-            self.Y = np.vstack((self.Y, Y_next))
-
             self.gp.update(X_next, Y_next)
 
-            if Y_opt is None or (self.minimize and Y_next < Y_opt):
+            if Y_opt is None or (self.minimize and Y_next < Y_opt) or (
+                not self.minimize and Y_next > Y_opt):
                 X_opt = X_next
                 Y_opt = Y_next
+
+        self.gp.X = self.gp.X[:-1]
 
         return X_opt, Y_opt
