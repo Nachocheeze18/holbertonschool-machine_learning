@@ -7,16 +7,17 @@ GP = __import__('2-gp').GaussianProcess
 
 class BayesianOptimization:
     """Bayesian class"""
-    def __init__(self, f, X_init, Y_init, bounds, ac_samples, l=1, sigma_f=1, xsi=0.01, minimize=True):
+    def __init__(self, f, X_init, Y_init, bounds, ac_samples, l=1,
+                 sigma_f=1, xsi=0.01, minimize=True):
         """performs Bayesian optimization on a noiseless 1D Gaussian process"""
         self.f = f
         self.gp = GP(X_init, Y_init, l, sigma_f)
         self.X_s = np.linspace(bounds[0], bounds[1], ac_samples).reshape(-1, 1)
         self.xsi = xsi
         self.minimize = minimize
-        self.X = X_init  # Initialize self.X with X_init
-        self.Y = Y_init  # Initialize self.Y with Y_init
-    
+        self.X = X_init
+        self.Y = Y_init
+
     def acquisition(self):
         """calculates the next best sample location"""
         mu, sigma = self.gp.predict(self.X_s)
@@ -45,6 +46,7 @@ class BayesianOptimization:
         for _ in range(iterations):
             X_next, _ = self.acquisition()
 
+            # Check if the proposed point has already been sampled
             if any(np.all(np.isclose(X_next, x)) for x in self.X):
                 break
 
@@ -56,10 +58,6 @@ class BayesianOptimization:
             self.gp.update(X_next, Y_next)
 
             if Y_opt is None or (self.minimize and Y_next < Y_opt):
-                X_opt = X_next
-                Y_opt = Y_next
-
-            if Y_opt is None or (not self.minimize and Y_next > Y_opt):
                 X_opt = X_next
                 Y_opt = Y_next
 
