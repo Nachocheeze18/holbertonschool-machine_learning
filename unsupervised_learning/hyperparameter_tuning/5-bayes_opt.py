@@ -39,23 +39,28 @@ class BayesianOptimization:
 
     def optimize(self, iterations=100):
         """optimizes the black-box function"""
-        for _ in range(iterations):
-            x_next, _ = self.acquisition()
+        X_opt = None
+        Y_opt = None
 
-            # Check if the proposed point has already been sampled
-            if any(np.all(np.isclose(x_next, x)) for x in self.X):
+        for _ in range(iterations):
+            X_next, _ = self.acquisition()
+
+            if any(np.all(np.isclose(X_next, x)) for x in self.X):
                 break
 
-            y_next = self.f(x_next)
-            self.X = np.vstack((self.X, x_next))
-            self.Y = np.vstack((self.Y, y_next))
+            Y_next = self.f(X_next)
 
-        if self.minimize:
-            x_opt_idx = np.argmin(self.Y)
-        else:
-            x_opt_idx = np.argmax(self.Y)
+            self.X = np.vstack((self.X, X_next))
+            self.Y = np.vstack((self.Y, Y_next))
 
-        x_opt = self.X[x_opt_idx]
-        y_opt = self.Y[x_opt_idx]
+            self.gp.update(X_next, Y_next)
 
-        return x_opt, y_opt
+            if Y_opt is None or (self.minimize and Y_next < Y_opt):
+                X_opt = X_next
+                Y_opt = Y_next
+
+            if Y_opt is None or (not self.minimize and Y_next > Y_opt):
+                X_opt = X_next
+                Y_opt = Y_next
+
+        return X_opt, Y_opt
