@@ -15,13 +15,15 @@ class GaussianProcess:
 
     def predict(self, X_s):
         """predicts the mean and standard deviation of points in a Gaussian process"""
-        Kernel_s = self.kernel(X_s, self.X)
-        Kernel_ss = self.kernel(X_s, X_s)
-        Kernel_inv = np.linalg.inv(self.K)
+        K_s = self.kernel(self.X, X_s)
+        K_ss = self.kernel(X_s, X_s)
+        K_inv = np.linalg.inv(self.K)
 
-        mean = Kernel_s.dot(Kernel_inv).dot(self.Y)
-        cov = Kernel_ss - Kernel_s.dot(Kernel_inv).dot(Kernel_s.T)
-        mu = mean.squeeze()
+        alpha = np.dot(K_inv, self.Y)
+        mu = np.dot(K_s.T, alpha)
+
+        cov = K_ss - np.dot(K_s.T, np.dot(K_inv, K_s))
+
         sigma = np.sqrt(np.diag(cov))
 
         return mu, sigma
