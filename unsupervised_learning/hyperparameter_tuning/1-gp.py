@@ -12,21 +12,23 @@ class GaussianProcess:
         self.l = l
         self.sigma_f = sigma_f
         self.K = self.kernel(X_init, X_init)
-        self.L = np.linalg.cholesky(self.K + 1e-8 * np.eye(len(X_init)))
+
+    def predict(self, X_s):
+        """predicts the mean and standard deviation of points in a Gaussian process"""
+        Kernel_s = self.kernel(X_s, self.X)
+        Kernel_ss = self.kernel(X_s, X_s)
+        Kernel_inv = np.linalg.inv(self.K)
+
+        mean = Kernel_s.dot(Kernel_inv).dot(self.Y)
+        cov = Kernel_ss - Kernel_s.dot(Kernel_inv).dot(Kernel_s.T)
+        mu = mean.squeeze()
+        sigma = np.sqrt(np.diag(cov))
+
+        return mu, sigma
 
     def kernel(self, X1, X2):
         """Represents a noiseless 1D Gaussian process"""
         dist_matrix = np.linalg.norm(X1[:, np.newaxis] - X2, axis=2)
         K = self.sigma_f**2 * np.exp(-0.5 * (dist_matrix / self.l)**2)
         return K
-    def predict(self, X_s):
-        """predicts the mean and standard deviation of points in a Gaussian process"""
-        Kernel_s = self.kernel(self.X, X_s)
-        Kernel_ss = self.kernel(X_s, X_s)
-        Kernel_inv = np.linalg.inv(self.K)
 
-        mean = Kernel_s.T.dot(Kernel_inv).dot(self.Y)
-        cov = Kernel_ss - Kernel_s.T.dot(Kernel_inv).dot(Kernel_s)
-        prediction = mean.squeeze(), np.sqrt(np.diag(cov))
-
-        return prediction
