@@ -14,16 +14,17 @@ class GaussianProcess:
         self.K = self.kernel(X_init, X_init)
 
     def predict(self, X_s):
-        """Predict the mean and standard deviation of points in a Gaussian process"""
+        """Predict the mean and standard deviation
+        of points in a Gaussian process"""
         s = X_s.shape[0]
-        
+
         K_s = self.kernel(self.X, X_s)
         mu = K_s.T @ np.linalg.inv(self.K) @ self.Y
         mu = mu.reshape(s,)
         
         K_ss = self.kernel(X_s, X_s)
         cov_s = K_ss - K_s.T @ np.linalg.inv(self.K) @ K_s
-        
+
         return mu, np.diag(cov_s)
 
     def kernel(self, X1, X2):
@@ -31,4 +32,3 @@ class GaussianProcess:
         dist_matrix = np.linalg.norm(X1[:, np.newaxis] - X2, axis=2)
         K = self.sigma_f**2 * np.exp(-0.5 * (dist_matrix / self.l)**2)
         return K
-
