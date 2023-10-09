@@ -21,7 +21,7 @@ class GaussianProcess:
         K_s = self.kernel(self.X, X_s)
         mu = K_s.T @ np.linalg.inv(self.K) @ self.Y
         mu = mu.reshape(s,)
-        
+
         K_ss = self.kernel(X_s, X_s)
         cov_s = K_ss - K_s.T @ np.linalg.inv(self.K) @ K_s
 
