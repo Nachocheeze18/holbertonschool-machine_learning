@@ -4,6 +4,7 @@ import tensorflow.keras as keras
 
 
 def autoencoder(input_dims, hidden_layers, latent_dims):
+    """creates an autoencoder"""
     encoder_input = keras.Input(shape=(input_dims,))
     x = encoder_input
     for num_units in hidden_layers:
