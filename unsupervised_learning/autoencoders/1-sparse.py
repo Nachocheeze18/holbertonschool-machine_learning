@@ -10,8 +10,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
     x = encoder_input
     for nodes in hidden_layers:
         x = keras.layers.Dense(nodes, activation='relu')(x)
-    latent = keras.layers.Dense(latent_dims, activation='relu',
-                                activity_regularizer=keras.regularizers.l1(lambtha))(x)
+    latent = keras.layers.Dense(latent_dims, activation='relu', activity_regularizer=keras.regularizers.l1(lambtha))(x)
     encoder = keras.Model(encoder_input, latent)
 
     decoder_input = keras.Input(shape=(latent_dims,))
@@ -30,8 +29,6 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
 
     conditions = ([layer.activation == keras.activations.relu
                    and layer.units is not None for layer in encoder.layers[1:]])
-
-    for _ in conditions:
-        print("True")
+    print(all(conditions))
 
     return encoder, decoder, auto
