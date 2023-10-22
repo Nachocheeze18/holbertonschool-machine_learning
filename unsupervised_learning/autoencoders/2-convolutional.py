@@ -23,20 +23,22 @@ def autoencoder(input_dims, filters, latent_dims):
                                 activation='relu', padding='same')(x)
         x = keras.layers.UpSampling2D((2, 2))(x)
 
-    auto = autoencoder
-
     decoder_output = keras.layers.Conv2D(input_dims[-1], (3, 3),
                                          activation='sigmoid', padding='same')(x)
 
-    decoder = keras.models.Model(latent_input, decoder_output, name='decoder')
+    decoder = keras.models.Model(latent_input, decoder_output,
+                                 name='decoder')
 
     auto_input = keras.layers.Input(shape=input_dims)
     latent_representation = encoder(auto_input)
     reconstructed_input = decoder(latent_representation)
-    autoencoder = keras.models.Model(auto_input,
+    auto = keras.models.Model(auto_input,
                                      reconstructed_input, name='autoencoder')
 
     auto.compile(optimizer=keras.optimizers.Adam(),
                  loss='binary_crossentropy')
 
     return encoder, decoder, auto
+
+decoder = autoencoder((28, 28, 1), [16, 8], (4, 4, 8))
+print(decoder.summary())
