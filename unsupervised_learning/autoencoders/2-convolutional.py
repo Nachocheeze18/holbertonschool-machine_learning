@@ -11,8 +11,8 @@ def autoencoder(input_dims, filters, latent_dims):
     for filter_size in filters:
         x = keras.layers.Conv2D(filter_size, (3, 3), activation='relu', padding='same')(x)
         x = keras.layers.MaxPooling2D((2, 2))(x)
-    latent = keras.layers.Conv2D(latent_dims[-1], (3, 3),
-                                 activation='relu', padding='same')(x)
+    latent = layers.Conv2D(latent_dims, (3, 3),
+                           activation='relu', padding='same')(x)
     encoder = keras.models.Model(input_layer, latent)
 
     latent_input = keras.layers.Input(shape=latent_dims)
