@@ -34,7 +34,5 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
                    layer.activation is not None and layer.units
                    is not None for layer in encoder.layers[1:]])
     print(all(conditions))
-    print(all(conditions))
-    print(all(conditions))
 
     return encoder, decoder, auto
