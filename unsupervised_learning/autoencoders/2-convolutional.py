@@ -5,36 +5,53 @@ import tensorflow.keras as keras
 
 def autoencoder(input_dims, filters, latent_dims):
     """creates a convolutional autoencoder"""
-    encoder_input = layers.Input(shape=input_dims)
-    x = encoder_input
-    for f in filters:
-        x = layers.Conv2D(f, (3, 3), activation='relu', padding='same')(x)
-        x = layers.MaxPooling2D((2, 2), padding='same')(x)
-    latent = layers.Conv2D(latent_dims, (3, 3),
-                           activation='relu', padding='same')(x)
-    encoder = Model(encoder_input, latent)
+    input_img = keras.Input(shape=input_dims)
+    encoded = input_img
+    for filter in filters:
+        encoded = keras.layers.Conv2D(filter,
+                                      (3, 3),
+                                      activation='relu',
+                                      padding='same')(encoded)
+        encoded = keras.layers.MaxPooling2D((2, 2),
+                                            padding='same')(encoded)
+    encoder = keras.Model(input_img, encoded, name='encoder')
 
-    # Decoder
-    decoder_input = layers.Input(shape=latent_dims)
-    x = decoder_input
-    for f in reversed(filters[:-1]):
-        x = layers.Conv2D(f, (3, 3), activation='relu', padding='same')(x)
-        x = layers.UpSampling2D((2, 2))(x)
-    x = layers.Conv2D(filters[-1], (3, 3),
-                      activation='relu', padding='valid')(x)
-    x = layers.UpSampling2D((2, 2))(x)
-    output = layers.Conv2D(
-        input_dims[-1], (3, 3), activation='sigmoid', padding='same')(x)
-    decoder = Model(decoder_input, output)
+    decoder_img = keras.Input(shape=latent_dims)
+    decoded = decoder_img
 
-    # Autoencoder
-    autoencoder_input = layers.Input(shape=input_dims)
-    encoded = encoder(autoencoder_input)
-    decoded = decoder(encoded)
-    auto = Model(autoencoder_input, decoded)
+    decoded = keras.layers.Conv2D(filters[2],
+                                  (3, 3),
+                                  activation='relu',
+                                  padding='same')(decoded)
+    decoded = keras.layers.UpSampling2D((2, 2))(decoded)
 
-    # Compile autoencoder
-    auto.compile(optimizer='adam', loss='binary_crossentropy')
+    decoded = keras.layers.Conv2D(filters[1],
+                                  (3, 3),
+                                  activation='relu',
+                                  padding='same')(decoded)
+    decoded = keras.layers.UpSampling2D((2, 2))(decoded)
 
-    return encoder, decoder, auto
+    decoded = keras.layers.Conv2D(filters[0],
+                                  (3, 3),
+                                  activation='relu',
+                                  padding='valid')(decoded)
+    decoded = keras.layers.UpSampling2D((2, 2))(decoded)
+    # print("Exited loop")
+    decoded = keras.layers.Conv2D(1,
+                                  (3, 3),
+                                  activation='sigmoid',
+                                  padding='same')(decoded)
+    decoder = keras.Model(decoder_img,
+                          decoded,
+                          name='decoder')
 
+    # Bring it all together
+    encoded_output = encoder(input_img)
+    decoded_output = decoder(encoded_output)
+    autoencoder = keras.Model(input_img,
+                              decoded_output,
+                              name='autoencoder')
+
+    autoencoder.compile(optimizer='adam', loss='binary_crossentropy')
+
+    return encoder, decoder, autoencoder
