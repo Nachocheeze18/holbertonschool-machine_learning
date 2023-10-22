@@ -2,6 +2,7 @@
 """Imports"""
 import tensorflow.keras as keras
 
+
 def autoencoder(input_dims, filters, latent_dims):
     """creates a convolutional autoencoder"""
     input_layer = keras.layers.Input(shape=input_dims)
