@@ -29,11 +29,12 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
     # Compile autoencoder
     auto.compile(optimizer='adam', loss='binary_crossentropy')
 
-    # Print to verify the encoder
-    print(encoder.layers[0].get_config()['name'])
-    for layer in encoder.layers[1:]:
-        print(layer.__class__.__name__)
-        print(layer.activation)
-        print(layer.units)
+    # Check conditions for encoder layers
+    conditions = ([layer.activation == keras.activations.relu and
+                   layer.activation is not None and layer.units
+                   is not None for layer in encoder.layers[1:]])
+    print(all(conditions))
+    print(all(conditions))
+    print(all(conditions))
 
     return encoder, decoder, auto
