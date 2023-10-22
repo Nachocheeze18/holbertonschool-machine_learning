@@ -21,8 +21,8 @@ def autoencoder(input_dims, filters, latent_dims):
         x = keras.layers.Conv2D(filter_size, (3, 3), activation='relu', padding='same')(x)
         x = keras.layers.UpSampling2D((2, 2))(x)
 
-    # Modify the last Conv2D layer's parameters to get (None, 4, 4, 8)
-    x = keras.layers.Conv2D(filters[-1], (3, 3), activation='relu', padding='valid')(x)  # Change padding to 'valid'
+    # Adjust the padding of the last MaxPooling2D layer to 'valid'
+    x = keras.layers.Conv2D(filters[-1], (3, 3), activation='relu', padding='valid')(x)
     x = keras.layers.UpSampling2D((2, 2))(x)
 
     decoder_output = keras.layers.Conv2D(input_dims[-1], (3, 3), activation='sigmoid', padding='same')(x)
