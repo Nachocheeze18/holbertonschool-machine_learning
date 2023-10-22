@@ -32,6 +32,7 @@ def autoencoder(input_dims, hidden_layers, latent_dims, lambtha):
     # Check conditions for encoder layers
     conditions = ([layer.activation == keras.activations.relu and
                    layer.units is not None for layer in encoder.layers[1:]])
-    print(all(conditions))
+    for condition in conditions:
+        print(condition)
 
     return encoder, decoder, auto
