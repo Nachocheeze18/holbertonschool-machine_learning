@@ -13,6 +13,7 @@ def sampling(args):
     epsilon = K.random_normal(shape=(batch, dim))
     return z_mean + K.exp(0.5 * z_log_var) * epsilon
 
+
 def autoencoder(input_dims, hidden_layers, latent_dims):
     """creates a variational autoencoder"""
     encoder_input = layers.Input(shape=(input_dims,))
@@ -20,7 +21,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     for nodes in hidden_layers:
         x = layers.Dense(nodes, activation='relu')(x)
     z_mean = layers.Dense(latent_dims, activation=None)(x)
-    z_log_var = layers.Dense(latent_dims, activation=None)(x)
+    z_log_var = layers.Dense(latent_dims,
+                             activation=None)(x)
     z = layers.Lambda(sampling, output_shape=(latent_dims,))([z_mean, z_log_var])
     encoder = models.Model(encoder_input, [z, z_mean, z_log_var])
 
@@ -36,7 +38,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     decoded = decoder(z)
     auto = models.Model(autoencoder_input, decoded)
 
-    reconstruction_loss = tf.keras.losses.binary_crossentropy(autoencoder_input, decoded)
+    reconstruction_loss = tf.keras.losses.binary_crossentropy
+    (autoencoder_input, decoded)
     reconstruction_loss *= input_dims
     kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
     kl_loss = K.sum(kl_loss, axis=-1)
