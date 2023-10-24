@@ -38,8 +38,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     decoded = decoder(z)
     auto = models.Model(autoencoder_input, decoded)
 
-    reconstruction_loss = tf.keras.losses.binary_crossentropy
-    (autoencoder_input, decoded)
+    reconstruction_loss = tf.keras.losses.binary_crossentropy(
+        autoencoder_input, decoded)
     reconstruction_loss *= input_dims
     kl_loss = 1 + z_log_var - K.square(z_mean) - K.exp(z_log_var)
     kl_loss = K.sum(kl_loss, axis=-1)
