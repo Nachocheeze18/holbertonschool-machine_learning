@@ -1,6 +1,9 @@
+#!/usr/bin/env python3
+"""Imports"""
 import tensorflow as tf
 from tensorflow.keras import layers, models
 import tensorflow.keras.backend as K
+
 
 def sampling(args):
     """sample latent space points based on the mean"""
