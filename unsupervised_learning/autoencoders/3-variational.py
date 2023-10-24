@@ -23,7 +23,8 @@ def autoencoder(input_dims, hidden_layers, latent_dims):
     z_mean = layers.Dense(latent_dims, activation=None)(x)
     z_log_var = layers.Dense(latent_dims,
                              activation=None)(x)
-    z = layers.Lambda(sampling, output_shape=(latent_dims,))([z_mean, z_log_var])
+    z = layers.Lambda(sampling, output_shape=(latent_dims,))([
+        z_mean, z_log_var])
     encoder = models.Model(encoder_input, [z, z_mean, z_log_var])
 
     decoder_input = layers.Input(shape=(latent_dims,))
