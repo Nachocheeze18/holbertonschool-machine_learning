@@ -20,5 +20,11 @@ class RNNCell:
         concat = np.hstack((h_prev, x_t))
         h_next = np.tanh(np.dot(concat, self.Wh) + self.bh)
         y = np.dot(h_next, self.Wy) + self.by
+        y = self.softmax(y)
 
         return h_next, y
+
+    def softmax(self, x):
+        """softmax activation"""
+        e_x = np.exp(x - np.max(x, axis=1, keepdims=True))
+        return e_x / e_x.sum(axis=1, keepdims=True)
