@@ -2,14 +2,16 @@
 """Imports"""
 import numpy as np
 
+
 class GRUCell:
+    """represents a gated recurrent unit"""
     def __init__(self, i, h, o):
         """Initializes a GRU cell with given dimensions."""
         self.Wz = np.random.randn(h + i, h)
         self.Wr = np.random.randn(h + i, h)
         self.Wh = np.random.randn(h + i, h)
         self.Wy = np.random.randn(h, o)
-        
+
         self.bz = np.zeros((1, h))
         self.br = np.zeros((1, h))
         self.bh = np.zeros((1, h))
