@@ -32,7 +32,7 @@ class LSTMCell:
 
         c_next = f * c_prev + u * c_hat
 
-        o = sigmoid(np.dot(concat_input, self.Wo) + self.bo)
+        o = sigmoid(np.dot(concat, self.Wo) + self.bo)
 
         h_next = o * np.tanh(c_next)
 
