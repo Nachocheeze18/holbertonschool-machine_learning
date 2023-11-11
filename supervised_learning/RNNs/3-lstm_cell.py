@@ -18,7 +18,6 @@ class LSTMCell:
         self.Wy = np.random.randn(h, o)
         self.by = np.zeros((1, o))
 
-
     def forward(self, h_prev, c_prev, x_t):
         """Performs forward propagation for one time step."""
         # Concatenate previous hidden state and input data
@@ -42,9 +41,11 @@ class LSTMCell:
 
 
 def sigmoid(x):
+    """sigmoid func"""
     return 1 / (1 + np.exp(-x))
 
 
 def softmax(x):
+    """softmax func"""
     exp_x = np.exp(x - np.max(x, axis=1, keepdims=True))
     return exp_x / np.sum(exp_x, axis=1, keepdims=True)
