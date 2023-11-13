@@ -36,6 +36,7 @@ class BidirectionalCell:
 
     def output(self, H):
         """Calculates all outputs for the RNN"""
-        Y = self.softmax(np.dot(H, self.Wy) + self.by)
+        Y = np.dot(H, self.Wy) + self.by
+        Y = np.exp(Y) / np.sum(np.exp(Y), axis=2, keepdims=True)
 
         return Y
