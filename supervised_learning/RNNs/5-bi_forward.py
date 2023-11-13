@@ -25,7 +25,7 @@ class BidirectionalCell:
         concat_for = np.concatenate((h_prev, x_t), axis=1)
         h_next_for = np.tanh(np.dot(concat_for, self.Whf) + self.bhf)
 
-        return h_next_for   
+        return h_next_for
 
     def backward(self, h_next, x_t):
         """Performs backward probagation"""
