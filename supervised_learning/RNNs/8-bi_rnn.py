@@ -1,4 +1,7 @@
+#!/usr/binj/env python3
+"""imports"""
 import numpy as np
+
 
 def bi_rnn(bi_cell, X, h_0, h_t):
     """Perform forward propagation for a bidirectional RNN."""
