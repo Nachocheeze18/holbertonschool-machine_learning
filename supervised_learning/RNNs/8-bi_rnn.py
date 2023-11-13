@@ -1,5 +1,5 @@
-#!/usr/binj/env python3
-"""imports"""
+#!/usr/bin/env python3
+"""Imports"""
 import numpy as np
 
 
