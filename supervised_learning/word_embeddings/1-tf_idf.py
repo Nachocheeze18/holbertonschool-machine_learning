@@ -6,7 +6,7 @@ import numpy as np
 
 def tf_idf(sentences, vocab=None):
     """creates a TF-IDF embedding"""
-    if vocab == None:
+    if vocab is None:
         vocab = set(word for sentence in sentences
                     for word in sentence.split())
 
