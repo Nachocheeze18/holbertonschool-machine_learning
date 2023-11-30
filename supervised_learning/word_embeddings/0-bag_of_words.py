@@ -17,4 +17,5 @@ def bag_of_words(sentences, vocab=None):
 
     embeddings = X.toarray()
 
-    return embeddings, features
+    z = embeddings, features
+    return z
