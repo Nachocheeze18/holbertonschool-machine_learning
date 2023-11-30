@@ -14,7 +14,7 @@ def tf_idf(sentences, vocab=None):
 
     embeddings = vec.fit_transform(sentences).toarray()
 
-    features = vec.get_feature_names_out()
+    features = vec.get_feature_names()
 
     z = embeddings, features
     return z
