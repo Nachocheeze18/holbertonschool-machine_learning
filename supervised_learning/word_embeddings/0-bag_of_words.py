@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 def bag_of_words(sentences, vocab=None):
     """embedding matrix"""
-    if vocab==None:
+    if vocab is None:
         vec = CountVectorizer()
         X = vec.fit_transform(sentences)
         features = vec.get_feature_names_out()
