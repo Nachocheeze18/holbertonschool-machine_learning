@@ -12,6 +12,8 @@ def uni_bleu(references, sentence):
     reference_length = min(len(ref) for ref in references)
     brevity_penalty = np.exp(1 - (reference_length / len(sentence))) if len(sentence) < reference_length else 1
 
+    brevity_penalty = 1
+
     bleu_score = brevity_penalty * precision
 
     return bleu_score
