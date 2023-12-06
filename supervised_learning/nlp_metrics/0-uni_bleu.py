@@ -5,26 +5,13 @@ import numpy as np
 
 def uni_bleu(references, sentence):
     """Convert references to the required format"""
-    ref_list = [[ref] for ref in references]
+    word_counts = {word: min([ref.count(word) for ref in references], default=0) for word in sentence}
+    total_matches = sum(word_counts.values())
+    precision = total_matches / len(sentence) if len(sentence) > 0 else 0
 
-    max_len = max(len(ref) for ref in ref_list)
-    ref_list = [ref + [None] * (
-        max_len - len(ref)) for ref in ref_list]
-    sentence = sentence + [None] * (
-        max_len - len(sentence))
+    reference_length = min(len(ref) for ref in references)
+    brevity_penalty = np.exp(1 - (reference_length / len(sentence))) if len(sentence) < reference_length else 1
 
-    match_counts = 0
-    total_counts = 0
-    for w in sentence:
-        if w is not None:
-            match_counts += max(
-                [ref.count(w) for ref in ref_list])
-            total_counts += 1
+    bleu_score = brevity_penalty * precision
 
-    precision = match_counts / total_counts
-
-    bp = min(1, len(sentence) / len(ref_list[0][0]))
-
-    score = bp * np.exp(np.log(precision))
-
-    return score
+    return bleu_score
