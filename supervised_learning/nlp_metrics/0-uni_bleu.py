@@ -9,6 +9,8 @@ def uni_bleu(references, sentence):
     total_matches = sum(min(ref.count(word) for ref in references) for word in sentence)
     precision = total_matches / len(sentence) if len(sentence) > 0 else 0
 
-    bleu_score = precision
+    brevity_penalty = np.exp(1 - total_word_count_refs / len(sentence)) if len(sentence) < total_word_count_refs else 1
+
+    bleu_score = brevity_penalty * precision
 
     return bleu_score
