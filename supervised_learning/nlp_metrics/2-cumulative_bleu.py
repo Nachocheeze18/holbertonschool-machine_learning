@@ -7,7 +7,8 @@ def cumulative_bleu(references, sentence, N):
     """Returns: the cumulative bleu score"""
     def make_ngrams(sentence, n):
         """converts a sentence to ngrams"""
-        ngrams = [' '.join(sentence[i:i+n]) for i in range(len(sentence) - n + 1)]
+        ngrams = [' '.join(sentence[i:i+n]) for i in range(len(
+            sentence) - n + 1)]
         return ngrams
 
     def count_ngrams(sentence, ngrams):
@@ -30,9 +31,11 @@ def cumulative_bleu(references, sentence, N):
         for reference in references:
             ngram_count = count_ngrams(reference, ngrams)
             for ngram in ngrams:
-                max_ref_count[ngram] = max(ngram_count[ngram], max_ref_count[ngram])
+                max_ref_count[ngram] = max(
+                    ngram_count[ngram], max_ref_count[ngram])
 
-        precision = np.sum(list(max_ref_count.values())) / np.sum(list(count_ngrams(sentence, ngrams).values()))
+        precision = np.sum(list(max_ref_count.values())) / np.sum(
+            list(count_ngrams(sentence, ngrams).values()))
         Pn.append(precision)
 
     if 0 in Pn:
