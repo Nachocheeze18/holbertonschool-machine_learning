@@ -16,7 +16,8 @@ def ngram_bleu(references, candidate_sentence, n):
         reference_ngrams_total += reference_ngrams
 
     clipped_counts = {ngram: min(candidate_ngrams[ngram],
-                                 reference_ngrams_total[ngram]) for ngram in candidate_ngrams}
+                                 reference_ngrams_total[ngram]
+                                 ) for ngram in candidate_ngrams}
     total_clipped_counts = sum(clipped_counts.values())
     total_candidate_counts = sum(candidate_ngrams.values())
 
