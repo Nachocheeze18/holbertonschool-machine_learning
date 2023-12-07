@@ -16,9 +16,9 @@ def ngram_bleu(references, sentence, n):
     float: The n-gram BLEU score.
     """
 
-    def calculate_precision(candidate, reference, n):
+    def calculate_precision(candidate, references, n):
         candidate_ngrams = [tuple(candidate[i:i + n]) for i in range(len(candidate) - n + 1)]
-        reference_ngrams = [tuple(reference[i:i + n]) for i in range(len(reference) - n + 1)]
+        reference_ngrams = [tuple(reference[i:i + n]) for reference in references for i in range(len(reference) - n + 1)]
 
         candidate_ngram_counts = Counter(candidate_ngrams)
         reference_ngram_counts = Counter(reference_ngrams)
@@ -43,7 +43,7 @@ def ngram_bleu(references, sentence, n):
     precision_scores = []
 
     for i in range(n):
-        precision_i = sum(calculate_precision(sentence, reference, i + 1) for reference in references) / len(references)
+        precision_i = calculate_precision(sentence, references, i + 1)
         precision_scores.append(precision_i)
 
     geometric_mean = (precision_i ** (1 / n) for precision_i in precision_scores)
