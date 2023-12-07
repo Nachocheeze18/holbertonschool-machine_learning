@@ -13,11 +13,11 @@ def uni_bleu(references, sentence):
         precision = len(common) / len(sentence)
         precisions.append(precision)
 
-    # Calculate brevity penalty
-    closest_ref_len = min((len(ref) for ref in references), key=lambda ref_len: (abs(ref_len - len(sentence)), ref_len))
-    brevity_penalty = np.exp(1 - closest_ref_len / len(sentence)) if len(sentence) < closest_ref_len else 1.0
+    closest_ref_len = min((len(ref) for ref in references),
+                          key=lambda ref_len: (abs(ref_len - len(sentence)), ref_len))
+    brevity_penalty = np.exp(1 - closest_ref_len / len(sentence)) if len(
+        sentence) < closest_ref_len else 1.0
 
-    # Calculate BLEU score
     bleu = brevity_penalty * np.exp(np.mean(np.log(precisions)))
 
     return bleu
