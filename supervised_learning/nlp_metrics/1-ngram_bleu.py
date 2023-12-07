@@ -18,7 +18,10 @@ def ngram_bleu(references, sentence, n):
 
     def calculate_precision(candidate, references, n):
         candidate_ngrams = [tuple(candidate[i:i + n]) for i in range(len(candidate) - n + 1)]
-        reference_ngrams = [tuple(reference[i:i + n]) for reference in references for i in range(len(reference) - n + 1)]
+
+        reference_ngrams = []
+        for reference in references:
+            reference_ngrams.extend([tuple(reference[i:i + n]) for i in range(len(reference) - n + 1)])
 
         candidate_ngram_counts = Counter(candidate_ngrams)
         reference_ngram_counts = Counter(reference_ngrams)
@@ -46,7 +49,8 @@ def ngram_bleu(references, sentence, n):
         precision_i = calculate_precision(sentence, references, i + 1)
         precision_scores.append(precision_i)
 
-    geometric_mean = (precision_i ** (1 / n) for precision_i in precision_scores)
+    geometric_mean = (precision_i for precision_i in precision_scores if precision_i > 0)
     bleu_score = brevity_penalty(sentence, references) * exp(sum(log(precision_i) for precision_i in geometric_mean) / n)
 
     return bleu_score
+
