@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+"""Imports"""
 from collections import Counter
+
 
 def cumulative_bleu(references, sentence, n):
     """Calculate cumulative n-gram BLEU score for a sentence."""
