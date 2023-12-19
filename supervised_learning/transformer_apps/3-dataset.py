@@ -5,7 +5,7 @@ import tensorflow_datasets as tfds
 
 class Dataset:
     """Class to handle translation datasets."""
-    def __init__(self):
+    def __init__(self, batch_size, max_len):
         self.data_train = tfds.load('ted_hrlr_translate/pt_to_en',
                                     split='train',
                                     as_supervised=True)
@@ -18,6 +18,15 @@ class Dataset:
         self.data_train = self.data_train.map(self.tf_encode)
         self.data_valid = self.data_valid.map(self.tf_encode)
 
+        self.data_train = self.data_train.filter(lambda x, y: tf.logical_and(tf.size(x) <= max_len, tf.size(y) <= max_len))
+        self.data_valid = self.data_valid.filter(lambda x, y: tf.logical_and(tf.size(x) <= max_len, tf.size(y) <= max_len))
+
+        self.data_train = self.data_train.cache()
+        self.data_train = self.data_train.shuffle(buffer_size=10000)
+        self.data_train = self.data_train.padded_batch(batch_size, padded_shapes=([None], [None]))
+        self.data_train = self.data_train.prefetch(tf.data.experimental.AUTOTUNE)
+
+        self.data_valid = self.data_valid.padded_batch(batch_size, padded_shapes=([None], [None]))
     def tokenize_dataset(self, data):
         """Initialize the Dataset."""
         all_text_pt = []
@@ -56,8 +65,8 @@ class Dataset:
 if __name__ == "__main__":
     import tensorflow as tf
 
-    data = Dataset()
-    print('got here')
+    tf.compat.v1.set_random_seed(0)
+    data = Dataset(32, 40)
     for pt, en in data.data_train.take(1):
         print(pt, en)
     for pt, en in data.data_valid.take(1):

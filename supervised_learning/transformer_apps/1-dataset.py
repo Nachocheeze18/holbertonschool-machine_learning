@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Imports"""
 import tensorflow_datasets as tfds
-import tensorflow as tf
-import numpy as np
+import tensorflow.compat.v2 as tf
 
 class Dataset:
     """Class to handle translation datasets."""
