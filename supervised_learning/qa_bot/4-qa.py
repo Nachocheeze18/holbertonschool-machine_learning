@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""
-Imports
-"""
+"""Imports"""
 import os
 from transformers import pipeline
 

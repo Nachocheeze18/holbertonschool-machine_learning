@@ -1,10 +1,12 @@
+#!/usr/bin/env/ python3
+"""Imports"""
 import os
 from transformers import BertTokenizer, TFAutoModelForQuestionAnswering
 from sklearn.metrics.pairwise import cosine_similarity
 
 
 def semantic_search(corpus_path, sentence):
-    # Load the pre-trained model and tokenizer
+    """performs semantic search on a corpus of documents"""
     tokenizer = BertTokenizer.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
     model = TFAutoModelForQuestionAnswering.from_pretrained("bert-large-uncased-whole-word-masking-finetuned-squad")
 
